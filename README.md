@@ -16,9 +16,12 @@
 ## 🚀 How to Use
 
 1. Launch the app.
-2. Click `Login` to authorize with Spotify (one-time).
-3. Choose an output path for your `.txt` file.
-4. Play music on Spotify — the file updates automatically.
+2. (Optionally) Before starting, register your own app at https://developer.spotify.com/dashboard.
+    Select the "Web API" as the platform, and set the callback URL to: http://127.0.0.1:5000/callback.
+    Once created, you’ll find the Client ID and Client Secret in the app’s dashboard—these are needed for login.
+3. Click `Login` to authorize with Spotify (one-time).
+4. Choose an output path for your `.txt` file.
+5. Play music on Spotify — the file updates automatically.
 
 Refer to the **Help** section in the app for a detailed guide.
 
