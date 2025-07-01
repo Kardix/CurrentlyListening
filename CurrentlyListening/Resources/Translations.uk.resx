@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+    <data name="LOGIN_FAILED" xml:space="preserve"><value>Сталася помилка, будь ласка, авторизуйтесь знову</value></data>
+    <data name="SELECT_OUTPUT" xml:space="preserve"><value>Виберіть місце збереження файлу</value></data>
+    <data name="NOTHING_PLAYING" xml:space="preserve"><value>Зараз нічого не відтворюється.</value></data>
+    <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Невідомий виконавець</value></data>
+    <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Невідома назва</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Шлях до файлу збережено:</value></data>
+    <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Збережено</value></data>
+    <data name="AUTH_SUCCESS" xml:space="preserve"><value>Авторизація успішна. Ви можете закрити це 
+        вікно.</value></data>
+    <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Вхід виконано успішно.</value></data>
+    <data name="HELP_1_0" xml:space="preserve">
+    <value>За бажанням, перед початком зареєструйте свій додаток на</value>
+  </data>
+    <data name="HELP_1_1" xml:space="preserve">
+    <value>Виберіть "Web API" як платформу і встановіть callback-URL на: http://127.0.0.1:5000/callback. Після створення ви знайдете Client ID та Client Secret на панелі застосунку — вони потрібні для входу.</value>
+  </data>
+    <data name="HELP_2" xml:space="preserve">
+    <value>1. Натисніть &quot;Увійти в Spotify&quot;, щоб підтвердити свою обліковку.</value>
+  </data>
+    <data name="HELP_3" xml:space="preserve">
+    <value>2. Оберіть, які дані треку показувати: Виконавець, Назва пісні та/або Час.</value>
+  </data>
+    <data name="HELP_4" xml:space="preserve">
+    <value>3. Використовуйте &quot;Вказати шлях до вихідного файлу&quot;, щоб вибрати, куди записуватиметься інформація.</value>
+  </data>
+    <data name="HELP_5" xml:space="preserve">
+    <value>4. Натисніть &quot;Оновити відображення&quot; для застосування змін. Файл оновлюється автоматично під час роботи додатку.</value>
+  </data>
+    <data name="HELP_TIP" xml:space="preserve">
+    <value>Порада: ви можете використовувати вихідний файл в OBS.</value>
+  </data>
+  <data xml:space="preserve" name="TRACK_DISPLAY_OPTIONS">
+    <value>Параметри відображення треків:</value>
+  </data>
+  <data xml:space="preserve" name="ARTIST">
+    <value>Виконавець</value>
+  </data>
+  <data xml:space="preserve" name="SONG_TITLE">
+    <value>Назва пісні</value>
+  </data>
+  <data xml:space="preserve" name="TIME">
+    <value>Час (Прогрес/Тривалість)</value>
+  </data>
+  <data xml:space="preserve" name="OUTPUT_PREVIEW">
+    <value>Попередній перегляд виводу:</value>
+  </data>
+  <data xml:space="preserve" name="HELP">
+    <value>Довідка</value>
+  </data>
+  <data xml:space="preserve" name="UPDATE_DISPLAY">
+    <value>Оновити відображення</value>
+  </data>
+  <data xml:space="preserve" name="LOGIN_SPOTIFY">
+    <value>Увійти в Spotify</value>
+  </data>
+  <data xml:space="preserve" name="SET_OUTPUT_LOCATION">
+    <value>Встановити шлях до файлу</value>
+  </data>
+  <data xml:space="preserve" name="USE_CUSTOM_CREDENTIALS">
+    <value>Використовувати власні Client ID і Secret</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_ID">
+    <value>Client ID</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_SECRET">
+    <value>Client Secret</value>
+  </data>
+  <data xml:space="preserve" name="HOW_TO_USE_APP">
+  <value>Як користуватись застосунком CurrentlyListening</value>
+</data>
+  <data xml:space="preserve" name="CREATED_BY">
+  <value>Створено </value>
+</data>
+</root>

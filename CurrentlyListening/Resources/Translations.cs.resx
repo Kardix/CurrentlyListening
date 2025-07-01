@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+    <data name="LOGIN_FAILED" xml:space="preserve"><value>Došlo k chybě s přihlašovacími údaji, prosím znovu autorizujte</value></data>
+    <data name="SELECT_OUTPUT" xml:space="preserve"><value>Vyberte umístění výstupního souboru</value></data>
+    <data name="NOTHING_PLAYING" xml:space="preserve"><value>Momentálně nic nehraje.</value></data>
+    <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Neznámý interpret</value></data>
+    <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Neznámý název</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Cesta k souboru byla uložena:\n{dialog.FileName}</value></data>
+    <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Uloženo</value></data>
+    <data name="AUTH_SUCCESS" xml:space="preserve"><value>Autorizace byla úspěšná. Můžete zavřít toto okno.</value></data>
+    <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Přihlášení bylo úspěšné.</value></data>
+    <data name="HELP_1_0" xml:space="preserve">
+    <value>Volitelně si před začátkem zaregistrujte vlastní aplikaci na</value>
+  </data>
+    <data name="HELP_1_1" xml:space="preserve">
+    <value>Jako platformu zvolte "Web API" a nastavte návratovou URL na: http://127.0.0.1:5000/callback. Po vytvoření najdete Client ID a Client Secret v dashboardu aplikace — ty jsou potřeba k přihlášení.</value>
+  </data>
+    <data name="HELP_2" xml:space="preserve">
+    <value>1. Klikněte na &quot;Přihlásit se ke Spotify&quot; pro ověření svého účtu.</value>
+  </data>
+    <data name="HELP_3" xml:space="preserve">
+    <value>2. Vyberte, které informace o skladbě se mají zobrazit: Umělec, Název skladby a/nebo Čas.</value>
+  </data>
+    <data name="HELP_4" xml:space="preserve">
+    <value>3. Použijte &quot;Nastavit umístění výstupního souboru&quot; pro výběr místa uložení informací o skladbě.</value>
+  </data>
+    <data name="HELP_5" xml:space="preserve">
+    <value>4. Klikněte na &quot;Aktualizovat zobrazení&quot; pro použití změn. Soubor se automaticky aktualizuje během běhu aplikace.</value>
+  </data>
+    <data name="HELP_TIP" xml:space="preserve">
+    <value>Tip: Výstupní soubor můžete použít v OBS překryvech nebo streamovacích widgetech.</value>
+  </data>
+  <data xml:space="preserve" name="TRACK_DISPLAY_OPTIONS">
+    <value>Možnosti zobrazení skladeb:</value>
+  </data>
+  <data xml:space="preserve" name="ARTIST">
+    <value>Interpret</value>
+  </data>
+  <data xml:space="preserve" name="SONG_TITLE">
+    <value>Název skladby</value>
+  </data>
+  <data xml:space="preserve" name="TIME">
+    <value>Čas (Průběh/Doba trvání)</value>
+  </data>
+  <data xml:space="preserve" name="OUTPUT_PREVIEW">
+    <value>Náhled výstupu:</value>
+  </data>
+  <data xml:space="preserve" name="HELP">
+    <value>Nápověda</value>
+  </data>
+  <data xml:space="preserve" name="UPDATE_DISPLAY">
+    <value>Aktualizovat zobrazení</value>
+  </data>
+  <data xml:space="preserve" name="LOGIN_SPOTIFY">
+    <value>Přihlásit se ke Spotify</value>
+  </data>
+  <data xml:space="preserve" name="SET_OUTPUT_LOCATION">
+    <value>Nastavit umístění výstupního souboru</value>
+  </data>
+  <data xml:space="preserve" name="USE_CUSTOM_CREDENTIALS">
+    <value>Použít vlastní ID klienta a tajný klíč</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_ID">
+    <value>ID klienta</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_SECRET">
+    <value>Tajný klíč klienta</value>
+  </data>
+  <data xml:space="preserve" name="HOW_TO_USE_APP">
+  <value>Jak používat aplikaci CurrentlyListening</value>
+</data>
+  <data xml:space="preserve" name="CREATED_BY">
+  <value>Vytvořil </value>
+</data>
+</root>

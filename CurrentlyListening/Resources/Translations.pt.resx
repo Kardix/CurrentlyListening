@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+    <resheader name="version"><value>2.0</value></resheader>
+    <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+    <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+    <data name="LOGIN_FAILED" xml:space="preserve"><value>Algo deu errado com os dados de login, por favor reautorize</value></data>
+    <data name="SELECT_OUTPUT" xml:space="preserve"><value>Selecionar local do arquivo de saída</value></data>
+    <data name="NOTHING_PLAYING" xml:space="preserve"><value>Nada está tocando no momento.</value></data>
+    <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Artista desconhecido</value></data>
+    <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Título desconhecido</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Caminho do arquivo salvo:\n{dialog.FileName}</value></data>
+    <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Salvo</value></data>
+    <data name="AUTH_SUCCESS" xml:space="preserve"><value>Autorização bem-sucedida. Você pode fechar esta janela.</value></data>
+    <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Login realizado com sucesso.</value></data>
+    <data name="HELP_1_0" xml:space="preserve">
+    <value>Opcionalmente, antes de começar, registre seu próprio aplicativo em</value>
+  </data>
+    <data name="HELP_1_1" xml:space="preserve">
+    <value>Selecione "Web API" como plataforma e defina a URL de retorno para: http://127.0.0.1:5000/callback. Uma vez criado, você encontrará o Client ID e o Client Secret no painel da aplicação — necessários para o login.</value>
+  </data>
+    <data name="HELP_2" xml:space="preserve">
+    <value>1. Clique em &quot;Entrar no Spotify&quot; para autenticar sua conta.</value>
+  </data>
+    <data name="HELP_3" xml:space="preserve">
+    <value>2. Escolha quais detalhes da faixa mostrar: Artista, Título da música e/ou Tempo.</value>
+  </data>
+    <data name="HELP_4" xml:space="preserve">
+    <value>3. Use &quot;Definir local do arquivo de saída&quot; para escolher onde as informações da faixa serão gravadas.</value>
+  </data>
+    <data name="HELP_5" xml:space="preserve">
+    <value>4. Clique em &quot;Atualizar exibição&quot; para aplicar as alterações. O arquivo é atualizado automaticamente enquanto o aplicativo está em execução.</value>
+  </data>
+    <data name="HELP_TIP" xml:space="preserve">
+    <value>Dica: Você pode usar o arquivo de saída em sobreposições OBS ou widgets de stream.</value>
+  </data>
+  <data xml:space="preserve" name="TRACK_DISPLAY_OPTIONS">
+    <value>Opções de exibição da faixa:</value>
+  </data>
+  <data xml:space="preserve" name="ARTIST">
+    <value>Artista</value>
+  </data>
+  <data xml:space="preserve" name="SONG_TITLE">
+    <value>Título da música</value>
+  </data>
+  <data xml:space="preserve" name="TIME">
+    <value>Tempo (Progresso/Duração)</value>
+  </data>
+  <data xml:space="preserve" name="OUTPUT_PREVIEW">
+    <value>Pré-visualização da saída:</value>
+  </data>
+  <data xml:space="preserve" name="HELP">
+    <value>Ajuda</value>
+  </data>
+  <data xml:space="preserve" name="UPDATE_DISPLAY">
+    <value>Atualizar exibição</value>
+  </data>
+  <data xml:space="preserve" name="LOGIN_SPOTIFY">
+    <value>Entrar no Spotify</value>
+  </data>
+  <data xml:space="preserve" name="SET_OUTPUT_LOCATION">
+    <value>Definir local do arquivo de saída</value>
+  </data>
+  <data xml:space="preserve" name="USE_CUSTOM_CREDENTIALS">
+    <value>Usar ID e segredo personalizados</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_ID">
+    <value>ID do cliente</value>
+  </data>
+  <data xml:space="preserve" name="CLIENT_SECRET">
+    <value>Segredo do cliente</value>
+  </data>
+  <data xml:space="preserve" name="HOW_TO_USE_APP">
+  <value>Como usar o aplicativo CurrentlyListening</value>
+</data>
+  <data xml:space="preserve" name="CREATED_BY">
+  <value>Criado por </value>
+</data>
+</root>
