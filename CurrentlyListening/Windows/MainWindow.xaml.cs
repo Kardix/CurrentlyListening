@@ -20,30 +20,31 @@ namespace CurrentlyListening.Windows
 {
     public partial class MainWindow
     {
-        private string _clientId = "a31d64d9bb5545158552acf47b484cce";
-        private string _clientSecret = "62f7985024ef46e18ca4ff7249e11150";
         private const string RedirectUri = "http://127.0.0.1:5000/callback";
-        private string _lastArtist;
-        private string _lastTitle;
-        private int _initialProgressMs;
-        private bool _isPlaying = true;
-        private DateTime _songStartTime;
-        private IHttpClientFactory _httpClientFactory;
-        string output = "";
-
-
-        private SpotifyToken _tokens;
 
         private readonly string _tokenPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SpotifyRetranslator", "tokens.json"
         );
 
-        private DispatcherTimer _displayTimer = new();
-        private DispatcherTimer _spotifyPollTimer = new();
+        private string _clientId = "a31d64d9bb5545158552acf47b484cce"; // development spotify key, useless
+        private string _clientSecret = "62f7985024ef46e18ca4ff7249e11150"; // development spotify key, useless
         private int _currentSongDuration; // in ms
         private string _currentTrackId;
+
+        private DispatcherTimer _displayTimer = new();
+        private IHttpClientFactory _httpClientFactory;
+        private int _initialProgressMs;
+        private bool _isPlaying = true;
+        private string _lastArtist;
+        private string _lastTitle;
         private string _outputFilePath = "trackinfo.txt";
+        private DateTime _songStartTime;
+        private DispatcherTimer _spotifyPollTimer = new();
+
+
+        private SpotifyToken _tokens;
+        string output = "";
 
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
@@ -60,6 +61,7 @@ namespace CurrentlyListening.Windows
                     break;
                 }
             }
+
             LanguageSelector.SelectionChanged += LanguageSelector_SelectionChanged;
             NameLabels();
             _outputFilePath = Settings.OutputFilePath;
@@ -106,17 +108,18 @@ namespace CurrentlyListening.Windows
                 Settings.OutputFilePath = dialog.FileName;
                 Settings.SaveSettings(); // persist to disk
 
-                MessageBox.Show(Translations.FILE_SAVED, Translations.FILE_SAVED_CAPTION, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Translations.FILE_SAVED, Translations.FILE_SAVED_CAPTION, MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
         }
 
         private void UpdateDisplay_Click(object sender, RoutedEventArgs e)
         {
             // Simulated data for now
-            string artist="";
-            string title="";
-            int progressMs=0;
-            int durationMs=1;
+            string artist = "";
+            string title = "";
+            int progressMs = 0;
+            int durationMs = 1;
 
             string output = "";
 
@@ -141,7 +144,7 @@ namespace CurrentlyListening.Windows
 
         private string FormatTime(int ms) =>
             TimeSpan.FromMilliseconds(ms).ToString(@"m\:ss");
- 
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             string state = Guid.NewGuid().ToString("N");
@@ -299,7 +302,7 @@ namespace CurrentlyListening.Windows
                 }
 
                 var content = await response.Content.ReadAsStringAsync();
-                
+
                 if (string.IsNullOrEmpty(content))
                 {
                     output = Translations.NOTHING_PLAYING;
@@ -355,15 +358,19 @@ namespace CurrentlyListening.Windows
 
         private void UpdateDisplayedText()
         {
-            
-            if (string.IsNullOrEmpty(_currentTrackId)) { OutputBox.Text = output; File.WriteAllText(_outputFilePath, output); return;}
+            if (string.IsNullOrEmpty(_currentTrackId))
+            {
+                OutputBox.Text = output;
+                File.WriteAllText(_outputFilePath, output);
+                return;
+            }
 
             output = "";
             string artist = _lastArtist ?? "Unknown Artist";
             string title = _lastTitle ?? "Unknown Title";
             int elapsed;
             if (_isPlaying)
-                 elapsed = (int)(DateTime.UtcNow - _songStartTime).TotalMilliseconds;
+                elapsed = (int)(DateTime.UtcNow - _songStartTime).TotalMilliseconds;
             else
             {
                 elapsed = _initialProgressMs;
@@ -376,7 +383,6 @@ namespace CurrentlyListening.Windows
                 return;
             }
 
-            
 
             if (ArtistCheckbox.IsChecked == true)
                 output += artist;
@@ -394,7 +400,7 @@ namespace CurrentlyListening.Windows
             }
 
             OutputBox.Text = output;
-            File.WriteAllText(_outputFilePath, output );
+            File.WriteAllText(_outputFilePath, output);
         }
 
         private void ShowAboutWindow_Click(object sender, RoutedEventArgs e)
@@ -412,7 +418,7 @@ namespace CurrentlyListening.Windows
             helpWindow.Owner = this;
             helpWindow.ShowDialog();
         }
-        
+
         private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LanguageSelector.SelectedItem is ComboBoxItem selectedItem)
