@@ -52,6 +52,9 @@ namespace CurrentlyListening.Windows
             Settings.LoadSettings();
             Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.LangCode);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.LangCode);
+            ArtistCheckbox.IsChecked = Settings.ShowArtist;
+            TitleCheckbox.IsChecked = Settings.ShowTitle;
+            DurationCheckbox.IsChecked = Settings.ShowDuration;
             LanguageSelector.SelectionChanged -= LanguageSelector_SelectionChanged;
             foreach (var item in LanguageSelector.Items)
             {
@@ -82,7 +85,7 @@ namespace CurrentlyListening.Windows
             TrackDisplay.Text = Translations.TRACK_DISPLAY_OPTIONS;
             ArtistCheckbox.Content = Translations.ARTIST;
             TitleCheckbox.Content = Translations.SONG_TITLE;
-            TimeCheckbox.Content = Translations.TIME;
+            DurationCheckbox.Content = Translations.TIME;
             HelpButton.Content = Translations.HELP;
             OutputPreview.Text = Translations.OUTPUT_PREVIEW;
             UpdateDisplay.Content = Translations.UPDATE_DISPLAY;
@@ -132,7 +135,7 @@ namespace CurrentlyListening.Windows
                 output += title;
             }
 
-            if (TimeCheckbox.IsChecked == true)
+            if (DurationCheckbox.IsChecked == true)
             {
                 if (!string.IsNullOrEmpty(output)) output += " ";
                 output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
@@ -337,7 +340,7 @@ namespace CurrentlyListening.Windows
                         output += title;
                     }
 
-                    if (TimeCheckbox.IsChecked == true)
+                    if (DurationCheckbox.IsChecked == true)
                     {
                         if (!string.IsNullOrEmpty(output)) output += " ";
                         output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
@@ -393,7 +396,7 @@ namespace CurrentlyListening.Windows
                 output += title;
             }
 
-            if (TimeCheckbox.IsChecked == true)
+            if (DurationCheckbox.IsChecked == true)
             {
                 if (!string.IsNullOrEmpty(output)) output += " ";
                 output += $"{FormatTime(elapsed)} / {FormatTime(_currentSongDuration)}";
@@ -444,6 +447,21 @@ namespace CurrentlyListening.Windows
         private void UseCustomCredentialsCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
             CustomCredentialsPanel.Visibility = Visibility.Collapsed;
+        }
+
+        private void DurationCheckbox_OnClick(object sender, RoutedEventArgs e)
+        {
+            Settings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
+        }
+
+        private void TitleCheckbox_OnClick(object sender, RoutedEventArgs e)
+        {
+            Settings.ShowTitle = TitleCheckbox.IsChecked.HasValue && TitleCheckbox.IsChecked.Value;
+        }
+
+        private void ArtistCheckbox_OnClick(object sender, RoutedEventArgs e)
+        {
+            Settings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
         }
     }
 }

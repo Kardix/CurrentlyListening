@@ -27,9 +27,9 @@
         </ComboBox>
         </Grid>
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <CheckBox x:Name="ArtistCheckbox" Content="Artist" IsChecked="True" Margin="0,0,10,0"/>
-            <CheckBox x:Name="TitleCheckbox" Content="Song Title" IsChecked="True" Margin="0,0,10,0"/>
-            <CheckBox x:Name="TimeCheckbox" Content="Time (Progress/Duration)" IsChecked="True"/>
+            <CheckBox x:Name="ArtistCheckbox" Content="Artist" IsChecked="True" Margin="0,0,10,0" Click="ArtistCheckbox_OnClick"/>
+            <CheckBox x:Name="TitleCheckbox" Content="Song Title" IsChecked="True" Margin="0,0,10,0" Click="TitleCheckbox_OnClick"/>
+            <CheckBox x:Name="DurationCheckbox" Content="Time (Progress/Duration)" IsChecked="True" Click="DurationCheckbox_OnClick"/>
         </StackPanel>
 
         <Grid Margin="0,0,0,5">
