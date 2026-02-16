@@ -77,4 +77,10 @@
   <data xml:space="preserve" name="CREATED_BY">
   <value>Criado por </value>
 </data>
+  <data name="MINIMIZE_NOTIFICATION_TEXT" xml:space="preserve">
+    <value>O aplicativo foi minimizado. Clique no ícone da bandeja para exibi-lo.</value>
+  </data>
+  <data name="CLOSE" xml:space="preserve">
+    <value>Sair</value>
+  </data>
 </root>

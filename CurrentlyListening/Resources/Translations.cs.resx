@@ -77,4 +77,10 @@
   <data xml:space="preserve" name="CREATED_BY">
   <value>Vytvořil </value>
 </data>
+  <data name="MINIMIZE_NOTIFICATION_TEXT" xml:space="preserve">
+    <value>Aplikace byla minimalizována. Klikněte na ikonu v oznamovací oblasti pro zobrazení.</value>
+  </data>
+  <data name="CLOSE" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
 </root>

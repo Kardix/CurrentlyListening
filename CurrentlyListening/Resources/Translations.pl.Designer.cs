@@ -96,6 +96,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zamknij.
+        /// </summary>
+        internal static string CLOSE {
+            get {
+                return ResourceManager.GetString("CLOSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stworzone przez .
         /// </summary>
         internal static string CREATED_BY {
@@ -227,6 +236,15 @@ namespace CurrentlyListening.Resources {
         internal static string LOGIN_SUCCESS {
             get {
                 return ResourceManager.GetString("LOGIN_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aplikacja została zminimalizowana. Kliknij ikonę w zasobniku systemowym, aby ją wyświetlić..
+        /// </summary>
+        internal static string MINIMIZE_NOTIFICATION_TEXT {
+            get {
+                return ResourceManager.GetString("MINIMIZE_NOTIFICATION_TEXT", resourceCulture);
             }
         }
         

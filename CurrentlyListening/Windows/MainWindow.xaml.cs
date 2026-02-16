@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -8,13 +9,16 @@ using System.Text;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using CurrentlyListening.Models;
 using CurrentlyListening.Properties;
 using CurrentlyListening.Resources;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.MessageBox;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace CurrentlyListening.Windows
 {
@@ -45,6 +49,9 @@ namespace CurrentlyListening.Windows
 
         private SpotifyToken _tokens;
         string output = "";
+        private NotifyIcon m_notifyIcon;
+        private ContextMenuStrip _trayMenu;
+        private ToolStripMenuItem exitItem;
 
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
@@ -56,6 +63,7 @@ namespace CurrentlyListening.Windows
             TitleCheckbox.IsChecked = Settings.ShowTitle;
             DurationCheckbox.IsChecked = Settings.ShowDuration;
             LanguageSelector.SelectionChanged -= LanguageSelector_SelectionChanged;
+            
             foreach (var item in LanguageSelector.Items)
             {
                 if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == Settings.LangCode)
@@ -66,6 +74,8 @@ namespace CurrentlyListening.Windows
             }
 
             LanguageSelector.SelectionChanged += LanguageSelector_SelectionChanged;
+            m_notifyIcon = new NotifyIcon();
+            InitializeTray();
             NameLabels();
             _outputFilePath = Settings.OutputFilePath;
             _httpClientFactory = httpClientFactory;
@@ -78,10 +88,90 @@ namespace CurrentlyListening.Windows
             _spotifyPollTimer.Interval = TimeSpan.FromSeconds(5);
             _spotifyPollTimer.Tick += async (s, e) => await UpdateTrackInfo();
             _spotifyPollTimer.Start();
+            
+            this.Closing += MainWindow_Closing;
+            
         }
+        
+        private void InitializeTray()
+        {
+            _trayMenu = new ContextMenuStrip();
 
+            exitItem = new ToolStripMenuItem(Translations.CLOSE);
+            exitItem.Click += ExitItem_Click;
+
+            _trayMenu.Items.Add(exitItem);
+
+            var uri = new Uri("pack://application:,,,/Resources/20250507_2010_Green_Play_Icon_simple_compose_01jtnvk6jcegmaa6be56qpgkgj-removebg-preview.ico");
+            var streamInfo = Application.GetResourceStream(uri);
+            m_notifyIcon = new NotifyIcon
+            {
+                
+                Icon = new System.Drawing.Icon(streamInfo.Stream), // or your app icon
+                Visible = true,
+                ContextMenuStrip = _trayMenu
+            };
+            m_notifyIcon.MouseClick += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    // Left click logic
+                    if (WindowState == WindowState.Minimized)
+                    {
+                        WindowState = WindowState.Normal;
+                        Show();
+                    }
+                    else
+                    {
+                        WindowState = WindowState.Minimized;
+                        Hide();
+                    }
+                    
+                    Activate();
+                }
+                else if (e.Button == MouseButtons.Right)
+                {
+                    // Right click logic
+                    // Usually you don't need this if using ContextMenuStrip
+                    // But you can force show menu manually if needed:
+                    _trayMenu.Show();
+                }
+            };
+            
+            m_notifyIcon.DoubleClick += (s, e) =>
+            {
+                Show();
+                WindowState = WindowState.Normal;
+                Activate();
+            };
+            
+        }
+        
+        private void ExitItem_Click(object sender, EventArgs e)
+        {
+            m_notifyIcon.Visible = false;
+            m_notifyIcon.Dispose();
+            this.Closing -= MainWindow_Closing;
+            Application.Current.Shutdown();
+        }
+        
+        void OnClose(object sender, CancelEventArgs args)
+        {
+            if (WindowState == WindowState.Normal)
+            {
+                Hide();
+                if(m_notifyIcon != null)
+                    m_notifyIcon.ShowBalloonTip(2000);
+            }
+            else
+                WindowState = WindowState.Normal;
+        }
+        
         private void NameLabels()
         {
+            m_notifyIcon.BalloonTipText = Translations.MINIMIZE_NOTIFICATION_TEXT;
+            m_notifyIcon.BalloonTipTitle = Translations.APP_NAME;
+            m_notifyIcon.Text = Translations.APP_NAME;
             TrackDisplay.Text = Translations.TRACK_DISPLAY_OPTIONS;
             ArtistCheckbox.Content = Translations.ARTIST;
             TitleCheckbox.Content = Translations.SONG_TITLE;
@@ -95,6 +185,8 @@ namespace CurrentlyListening.Windows
             ClientIdText.Text = Translations.CLIENT_ID;
             ClientSecretText.Text = Translations.CLIENT_SECRET;
             CreatedBy.Text = Translations.CREATED_BY;
+            exitItem.Text = Translations.CLOSE;
+
         }
 
         private void SetOutputFileButton_Click(object sender, RoutedEventArgs e)
@@ -462,6 +554,22 @@ namespace CurrentlyListening.Windows
         private void ArtistCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
             Settings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
+        }
+
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Cancel normal close
+            e.Cancel = true;
+
+            // Hide instead
+            Hide();
+
+            // Optional: show tray balloon once
+            m_notifyIcon?.ShowBalloonTip(
+                2000,
+                Translations.APP_NAME,
+                Translations.MINIMIZE_NOTIFICATION_TEXT,
+                System.Windows.Forms.ToolTipIcon.Info);
         }
     }
 }

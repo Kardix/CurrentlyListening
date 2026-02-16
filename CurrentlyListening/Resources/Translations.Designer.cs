@@ -60,6 +60,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CurrentlyListening.
+        /// </summary>
+        internal static string APP_NAME {
+            get {
+                return ResourceManager.GetString("APP_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Artist.
         /// </summary>
         internal static string ARTIST {
@@ -92,6 +101,15 @@ namespace CurrentlyListening.Resources {
         internal static string CLIENT_SECRET {
             get {
                 return ResourceManager.GetString("CLIENT_SECRET", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string CLOSE {
+            get {
+                return ResourceManager.GetString("CLOSE", resourceCulture);
             }
         }
         
@@ -227,6 +245,15 @@ namespace CurrentlyListening.Resources {
         internal static string LOGIN_SUCCESS {
             get {
                 return ResourceManager.GetString("LOGIN_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The app has been minimised. Click the tray icon to show..
+        /// </summary>
+        internal static string MINIMIZE_NOTIFICATION_TEXT {
+            get {
+                return ResourceManager.GetString("MINIMIZE_NOTIFICATION_TEXT", resourceCulture);
             }
         }
         

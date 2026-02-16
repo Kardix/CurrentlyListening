@@ -96,6 +96,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quitter.
+        /// </summary>
+        internal static string CLOSE {
+            get {
+                return ResourceManager.GetString("CLOSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Créé par .
         /// </summary>
         internal static string CREATED_BY {
@@ -227,6 +236,15 @@ namespace CurrentlyListening.Resources {
         internal static string LOGIN_SUCCESS {
             get {
                 return ResourceManager.GetString("LOGIN_SUCCESS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to L’application a été réduite. Cliquez sur l’icône dans la barre d’état système pour l’afficher..
+        /// </summary>
+        internal static string MINIMIZE_NOTIFICATION_TEXT {
+            get {
+                return ResourceManager.GetString("MINIMIZE_NOTIFICATION_TEXT", resourceCulture);
             }
         }
         
