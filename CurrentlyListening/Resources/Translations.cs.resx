@@ -83,4 +83,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Ukončit</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Při zavření minimalizovat do oznamovací oblasti</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Spustit minimalizované v oznamovací oblasti</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
 </root>

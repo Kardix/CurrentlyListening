@@ -105,6 +105,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Réduire dans la barre d’état système lors de la fermeture.
+        /// </summary>
+        internal static string CLOSE_SHOULD_MINIMIZE {
+            get {
+                return ResourceManager.GetString("CLOSE_SHOULD_MINIMIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Créé par .
         /// </summary>
         internal static string CREATED_BY {
@@ -285,11 +294,29 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paramètres.
+        /// </summary>
+        internal static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Titre de la chanson.
         /// </summary>
         internal static string SONG_TITLE {
             get {
                 return ResourceManager.GetString("SONG_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Démarrer réduit dans la barre d’état système.
+        /// </summary>
+        internal static string START_MINIMIZED {
+            get {
+                return ResourceManager.GetString("START_MINIMIZED", resourceCulture);
             }
         }
         

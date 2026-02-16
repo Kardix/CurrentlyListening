@@ -112,4 +112,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Start minimized to tray</value>
+  </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Minimize to tray when closing</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
 </root>

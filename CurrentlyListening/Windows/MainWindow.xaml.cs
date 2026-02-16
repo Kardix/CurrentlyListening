@@ -55,18 +55,20 @@ namespace CurrentlyListening.Windows
 
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
+            
+            Properties.AppSettings.LoadSettings();
+            
             InitializeComponent();
-            Settings.LoadSettings();
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(Settings.LangCode);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(Settings.LangCode);
-            ArtistCheckbox.IsChecked = Settings.ShowArtist;
-            TitleCheckbox.IsChecked = Settings.ShowTitle;
-            DurationCheckbox.IsChecked = Settings.ShowDuration;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(Properties.AppSettings.LangCode);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(Properties.AppSettings.LangCode);
+            ArtistCheckbox.IsChecked = Properties.AppSettings.ShowArtist;
+            TitleCheckbox.IsChecked = Properties.AppSettings.ShowTitle;
+            DurationCheckbox.IsChecked = Properties.AppSettings.ShowDuration;
             LanguageSelector.SelectionChanged -= LanguageSelector_SelectionChanged;
             
             foreach (var item in LanguageSelector.Items)
             {
-                if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == Settings.LangCode)
+                if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == Properties.AppSettings.LangCode)
                 {
                     LanguageSelector.SelectedItem = comboItem;
                     break;
@@ -77,7 +79,7 @@ namespace CurrentlyListening.Windows
             m_notifyIcon = new NotifyIcon();
             InitializeTray();
             NameLabels();
-            _outputFilePath = Settings.OutputFilePath;
+            _outputFilePath = Properties.AppSettings.OutputFilePath;
             _httpClientFactory = httpClientFactory;
             _ = LoadTokens();
 
@@ -186,6 +188,7 @@ namespace CurrentlyListening.Windows
             ClientSecretText.Text = Translations.CLIENT_SECRET;
             CreatedBy.Text = Translations.CREATED_BY;
             exitItem.Text = Translations.CLOSE;
+            Settings.Content = Translations.Settings;
 
         }
 
@@ -200,8 +203,8 @@ namespace CurrentlyListening.Windows
 
             if (dialog.ShowDialog() == true)
             {
-                Settings.OutputFilePath = dialog.FileName;
-                Settings.SaveSettings(); // persist to disk
+                Properties.AppSettings.OutputFilePath = dialog.FileName;
+                Properties.AppSettings.SaveSettings(); // persist to disk
 
                 MessageBox.Show(Translations.FILE_SAVED, Translations.FILE_SAVED_CAPTION, MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -513,6 +516,13 @@ namespace CurrentlyListening.Windows
             helpWindow.Owner = this;
             helpWindow.ShowDialog();
         }
+        
+        private void OpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.Owner = this;
+            settingsWindow.ShowDialog();
+        }
 
         private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -523,9 +533,9 @@ namespace CurrentlyListening.Windows
                 {
                     Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
                     Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
-                    Settings.LangCode = cultureCode;
+                    Properties.AppSettings.LangCode = cultureCode;
                     // Optionally, save to settings
-                    Settings.SaveSettings();
+                    Properties.AppSettings.SaveSettings();
                     NameLabels();
                 }
             }
@@ -543,34 +553,39 @@ namespace CurrentlyListening.Windows
 
         private void DurationCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Settings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
+            Properties.AppSettings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
         }
 
         private void TitleCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Settings.ShowTitle = TitleCheckbox.IsChecked.HasValue && TitleCheckbox.IsChecked.Value;
+            Properties.AppSettings.ShowTitle = TitleCheckbox.IsChecked.HasValue && TitleCheckbox.IsChecked.Value;
         }
 
         private void ArtistCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Settings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
+            Properties.AppSettings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // Cancel normal close
-            e.Cancel = true;
+            if (Properties.AppSettings.CloseToTray)
+            {
+                // Cancel normal close
+                e.Cancel = true;
 
-            // Hide instead
-            Hide();
+                // Hide instead
+                Hide();
 
-            // Optional: show tray balloon once
-            m_notifyIcon?.ShowBalloonTip(
-                2000,
-                Translations.APP_NAME,
-                Translations.MINIMIZE_NOTIFICATION_TEXT,
-                System.Windows.Forms.ToolTipIcon.Info);
+                // Optional: show tray balloon once
+                m_notifyIcon?.ShowBalloonTip(
+                    2000,
+                    Translations.APP_NAME,
+                    Translations.MINIMIZE_NOTIFICATION_TEXT,
+                    System.Windows.Forms.ToolTipIcon.Info);
+            }
         }
+
+
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.

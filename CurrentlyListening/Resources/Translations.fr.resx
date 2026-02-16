@@ -83,4 +83,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Quitter</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Réduire dans la barre d’état système lors de la fermeture</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Démarrer réduit dans la barre d’état système</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
 </root>

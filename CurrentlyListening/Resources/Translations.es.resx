@@ -83,4 +83,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Salir</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Minimizar a la bandeja al cerrar</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Iniciar minimizado en la bandeja</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
 </root>

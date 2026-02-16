@@ -28,14 +28,15 @@ public partial class App : Application
 
         // Resolve main window and show it
         var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-        Settings.LoadSettings();
-        var langCode = Settings.LangCode;
+        AppSettings.LoadSettings();
+        var langCode = AppSettings.LangCode;
         if (!string.IsNullOrEmpty(langCode))
         {
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(langCode);
             Thread.CurrentThread.CurrentCulture = new CultureInfo(langCode);
         }
-        mainWindow.Show();
+        if(!AppSettings.StartMinimized)
+            mainWindow.Show();
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.

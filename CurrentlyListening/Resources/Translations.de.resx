@@ -83,4 +83,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Beenden</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Beim Schließen in den Infobereich minimieren</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Minimiert im Infobereich starten</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
 </root>

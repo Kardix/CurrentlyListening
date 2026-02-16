@@ -114,6 +114,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimize to tray when closing.
+        /// </summary>
+        internal static string CLOSE_SHOULD_MINIMIZE {
+            get {
+                return ResourceManager.GetString("CLOSE_SHOULD_MINIMIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created by .
         /// </summary>
         internal static string CREATED_BY {
@@ -294,11 +303,29 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        internal static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Song Title.
         /// </summary>
         internal static string SONG_TITLE {
             get {
                 return ResourceManager.GetString("SONG_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start minimized to tray.
+        /// </summary>
+        internal static string START_MINIMIZED {
+            get {
+                return ResourceManager.GetString("START_MINIMIZED", resourceCulture);
             }
         }
         

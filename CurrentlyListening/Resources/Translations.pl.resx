@@ -83,4 +83,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Zamknij</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Minimalizuj do zasobnika przy zamykaniu</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Uruchamiaj zminimalizowaną w zasobniku</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Ustawienia</value>
+  </data>
 </root>

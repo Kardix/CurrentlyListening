@@ -105,6 +105,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimizar para a bandeja ao fechar.
+        /// </summary>
+        internal static string CLOSE_SHOULD_MINIMIZE {
+            get {
+                return ResourceManager.GetString("CLOSE_SHOULD_MINIMIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Criado por .
         /// </summary>
         internal static string CREATED_BY {
@@ -285,11 +294,29 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configurações.
+        /// </summary>
+        internal static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Título da música.
         /// </summary>
         internal static string SONG_TITLE {
             get {
                 return ResourceManager.GetString("SONG_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Iniciar minimizado na bandeja.
+        /// </summary>
+        internal static string START_MINIMIZED {
+            get {
+                return ResourceManager.GetString("START_MINIMIZED", resourceCulture);
             }
         }
         

@@ -4,13 +4,15 @@ using Newtonsoft.Json;
 
 namespace CurrentlyListening.Properties;
 
-public static class Settings
+public static class AppSettings
 {
     private static string _langCode = "en"; // default value
     private static string _outputFilePath = "trackinfo.txt"; // Default value
     private static bool _showArtist = true;
     private static bool _showTitle = true;
     private static bool _showDuration = true;
+    private static bool _closeToTray = true;
+    private static bool _startMinimized = false;
 
 
     // Property to get and set the file path
@@ -69,7 +71,35 @@ public static class Settings
         }
     }
     
-    // Property to get and set the file path
+    // Property to get and set the app close functionality 
+    public static bool CloseToTray
+    {
+        get { return _closeToTray; }
+        set
+        {
+            if (_closeToTray != value)
+            {
+                _closeToTray = value;
+                SaveSettings(); // Optionally save settings here if you want to persist them.
+            }
+        }
+    }
+    
+    // Property to get and set the app close functionality 
+    public static bool StartMinimized
+    {
+        get { return _startMinimized; }
+        set
+        {
+            if (_startMinimized != value)
+            {
+                _startMinimized = value;
+                SaveSettings(); // Optionally save settings here if you want to persist them.
+            }
+        }
+    }
+
+    // Property to get and set the app language
     public static string LangCode
     {
         get { return _langCode; }
@@ -91,7 +121,7 @@ public static class Settings
         string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SpotifyRetranslator", "settings.json");
         var settings = new { OutputFilePath = _outputFilePath, Language = _langCode, Artist = _showArtist, Song = _showTitle,
-            Duration = _showDuration };
+            Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized };
         File.WriteAllText(settingsPath, JsonConvert.SerializeObject(settings));
     }
 
@@ -109,6 +139,8 @@ public static class Settings
             _showTitle = settings?.Song ?? true;
             _showDuration = settings?.Duration ?? true;
             _langCode = settings?.Language ?? CultureInfo.CurrentUICulture;
+            _closeToTray =  settings?.CloseToTray ?? true;
+            _startMinimized = settings?.StartMinimized ?? false;
         }
     }
 }

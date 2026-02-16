@@ -84,4 +84,13 @@
   <data name="CLOSE" xml:space="preserve">
     <value>Вийти</value>
   </data>
+  <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
+    <value>Згортати в системний трей при закритті</value>
+  </data>
+  <data name="START_MINIMIZED" xml:space="preserve">
+    <value>Запускати згорнутим у системному треї</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Налаштування</value>
+  </data>
 </root>
