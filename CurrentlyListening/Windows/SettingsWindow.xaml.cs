@@ -16,6 +16,7 @@ namespace CurrentlyListening.Windows
             NameLabels();
             CloseShouldMinimize.IsChecked = Properties.AppSettings.CloseToTray;
             StartMinimized.IsChecked = AppSettings.StartMinimized;
+            CheckForUpdates.IsChecked = AppSettings.CheckForUpdates;
             TrailingSpacesSlider.Value = Properties.AppSettings.TrailingSpacesCount;
             TrailingSpacesTextBox.Text = Properties.AppSettings.TrailingSpacesCount.ToString();
         }
