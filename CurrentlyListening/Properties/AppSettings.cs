@@ -13,6 +13,7 @@ public static class AppSettings
     private static bool _showDuration = true;
     private static bool _closeToTray = true;
     private static bool _startMinimized = false;
+    public static int _trailingSpacesCount { get; set; }
 
 
     // Property to get and set the file path
@@ -112,7 +113,20 @@ public static class AppSettings
             }
         }
     }
-    
+
+    public static int TrailingSpacesCount
+    {
+        get { return _trailingSpacesCount; }
+        set
+        {
+            if (_trailingSpacesCount != value)
+            {
+                _trailingSpacesCount = value;
+                SaveSettings(); // Optionally save settings here if you want to persist them.
+            }
+        }
+    }
+
     // Method to save settings (you can use JSON or XML serialization for persistence)
     public static void SaveSettings()
     {

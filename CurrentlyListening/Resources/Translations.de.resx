@@ -92,4 +92,7 @@
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
+    <value>Anzahl der Leerzeichen am Ende der Ausgabedatei</value>
+  </data>
 </root>

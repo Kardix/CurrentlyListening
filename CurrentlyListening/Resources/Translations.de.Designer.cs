@@ -339,6 +339,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anzahl der Leerzeichen am Ende der Ausgabedatei.
+        /// </summary>
+        internal static string TRAILING_SPACES_TEXT {
+            get {
+                return ResourceManager.GetString("TRAILING_SPACES_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unbekannter Künstler.
         /// </summary>
         internal static string UNKNOWN_ARTIST {

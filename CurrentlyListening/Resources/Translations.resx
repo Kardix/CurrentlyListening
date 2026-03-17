@@ -121,4 +121,7 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
+    <value>Amount of trailing spaces in output file</value>
+  </data>
 </root>

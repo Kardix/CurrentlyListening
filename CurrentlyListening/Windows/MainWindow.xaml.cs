@@ -440,6 +440,13 @@ namespace CurrentlyListening.Windows
                         if (!string.IsNullOrEmpty(output)) output += " ";
                         output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
                     }
+                    if (AppSettings.TrailingSpacesCount != 0)
+                    {
+                        for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
+                        {
+                            output += " ";
+                        }
+                    }
 
                     OutputBox.Text = output;
                     File.WriteAllText(_outputFilePath, output);
@@ -495,6 +502,14 @@ namespace CurrentlyListening.Windows
             {
                 if (!string.IsNullOrEmpty(output)) output += " ";
                 output += $"{FormatTime(elapsed)} / {FormatTime(_currentSongDuration)}";
+            }
+
+            if (AppSettings.TrailingSpacesCount != 0)
+            {
+                for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
+                {
+                    output += " ";
+                }
             }
 
             OutputBox.Text = output;
@@ -584,8 +599,6 @@ namespace CurrentlyListening.Windows
                     System.Windows.Forms.ToolTipIcon.Info);
             }
         }
-
-
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.

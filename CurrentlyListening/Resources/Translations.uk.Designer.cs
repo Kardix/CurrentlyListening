@@ -340,6 +340,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Кількість пробілів у кінці вихідного файлу.
+        /// </summary>
+        internal static string TRAILING_SPACES_TEXT {
+            get {
+                return ResourceManager.GetString("TRAILING_SPACES_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Невідомий виконавець.
         /// </summary>
         internal static string UNKNOWN_ARTIST {

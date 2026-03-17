@@ -339,6 +339,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quantidade de espaços no final do arquivo de saída.
+        /// </summary>
+        internal static string TRAILING_SPACES_TEXT {
+            get {
+                return ResourceManager.GetString("TRAILING_SPACES_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Artista desconhecido.
         /// </summary>
         internal static string UNKNOWN_ARTIST {

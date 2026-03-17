@@ -92,4 +92,7 @@
   <data name="Settings" xml:space="preserve">
     <value>Nastavení</value>
   </data>
+  <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
+    <value>Počet mezer na konci výstupního souboru</value>
+  </data>
 </root>

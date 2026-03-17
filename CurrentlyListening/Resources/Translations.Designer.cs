@@ -348,6 +348,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount of trailing spaces in output file.
+        /// </summary>
+        internal static string TRAILING_SPACES_TEXT {
+            get {
+                return ResourceManager.GetString("TRAILING_SPACES_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown Artist.
         /// </summary>
         internal static string UNKNOWN_ARTIST {
