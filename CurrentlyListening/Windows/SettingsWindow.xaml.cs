@@ -46,7 +46,7 @@ namespace CurrentlyListening.Windows
             _isUpdatingTrailingSpaces = true;
             TrailingSpacesTextBox.Text = ((int)TrailingSpacesSlider.Value).ToString();
             _isUpdatingTrailingSpaces = false;
-            AppSettings._trailingSpacesCount = (int)TrailingSpacesSlider.Value;
+            AppSettings.TrailingSpacesCount = (int)TrailingSpacesSlider.Value;
         }
 
         private void TrailingSpacesTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -64,6 +64,7 @@ namespace CurrentlyListening.Windows
                 _isUpdatingTrailingSpaces = true;
                 TrailingSpacesSlider.Value = value;
                 _isUpdatingTrailingSpaces = false;
+                AppSettings.TrailingSpacesCount = (int)TrailingSpacesSlider.Value;
             }
         }
 

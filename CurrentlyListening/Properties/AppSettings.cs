@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.IO;
+using CurrentlyListening.Models;
 using Newtonsoft.Json;
 
 namespace CurrentlyListening.Properties;
@@ -147,8 +148,8 @@ public static class AppSettings
         // Here you can use a simple file-based persistence or JSON as an alternative.
         string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "SpotifyRetranslator", "settings.json");
-        var settings = new { OutputFilePath = _outputFilePath, Language = _langCode, Artist = _showArtist, Song = _showTitle,
-            Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized };
+        var settings = new UserSettings{ OutputFilePath = _outputFilePath, Language = _langCode, Artist = _showArtist, Song = _showTitle,
+            Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized, CheckForUpdates = _checkForUpdates, TrailingSpacesCount = _trailingSpacesCount };
         File.WriteAllText(settingsPath, JsonConvert.SerializeObject(settings));
     }
 
@@ -160,14 +161,16 @@ public static class AppSettings
         if (File.Exists(settingsPath))
         {
             var settingsJson = File.ReadAllText(settingsPath);
-            var settings = JsonConvert.DeserializeObject<dynamic>(settingsJson);
+            var settings = JsonConvert.DeserializeObject<UserSettings>(settingsJson);
             _outputFilePath = settings?.OutputFilePath ?? "trackinfo.txt"; // Default fallback
             _showArtist = settings?.Artist ?? true;
             _showTitle = settings?.Song ?? true;
             _showDuration = settings?.Duration ?? true;
-            _langCode = settings?.Language ?? CultureInfo.CurrentUICulture;
+            _langCode = settings?.Language ?? "en";
             _closeToTray =  settings?.CloseToTray ?? true;
             _startMinimized = settings?.StartMinimized ?? false;
+            _checkForUpdates = settings?.CheckForUpdates ?? true;
+            _trailingSpacesCount = settings?.TrailingSpacesCount ?? 0;
         }
     }
 }
