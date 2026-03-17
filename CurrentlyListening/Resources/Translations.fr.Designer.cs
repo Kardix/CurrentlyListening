@@ -78,6 +78,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vérifier les mises à jour au démarrage.
+        /// </summary>
+        internal static string CHECK_FOR_UPDATES {
+            get {
+                return ResourceManager.GetString("CHECK_FOR_UPDATES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ID client.
         /// </summary>
         internal static string CLIENT_ID {
@@ -119,6 +128,15 @@ namespace CurrentlyListening.Resources {
         internal static string CREATED_BY {
             get {
                 return ResourceManager.GetString("CREATED_BY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version actuelle :.
+        /// </summary>
+        internal static string CURRENT_VERSION {
+            get {
+                return ResourceManager.GetString("CURRENT_VERSION", resourceCulture);
             }
         }
         
@@ -222,6 +240,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dernière version :.
+        /// </summary>
+        internal static string LATEST_VERSION {
+            get {
+                return ResourceManager.GetString("LATEST_VERSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Une erreur s&apos;est produite avec les données de connexion, veuillez réautoriser.
         /// </summary>
         internal static string LOGIN_FAILED {
@@ -258,11 +285,29 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Une nouvelle version est disponible..
+        /// </summary>
+        internal static string NEW_VERSION_AVAILABLE {
+            get {
+                return ResourceManager.GetString("NEW_VERSION_AVAILABLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rien n&apos;est en cours de lecture..
         /// </summary>
         internal static string NOTHING_PLAYING {
             get {
                 return ResourceManager.GetString("NOTHING_PLAYING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ouvrir la page de téléchargement ?.
+        /// </summary>
+        internal static string OPEN_DOWNLOAD_PAGE {
+            get {
+                return ResourceManager.GetString("OPEN_DOWNLOAD_PAGE", resourceCulture);
             }
         }
         
@@ -362,6 +407,15 @@ namespace CurrentlyListening.Resources {
         internal static string UNKNOWN_TITLE {
             get {
                 return ResourceManager.GetString("UNKNOWN_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mise à jour disponible.
+        /// </summary>
+        internal static string UPDATE_AVAILABLE {
+            get {
+                return ResourceManager.GetString("UPDATE_AVAILABLE", resourceCulture);
             }
         }
         

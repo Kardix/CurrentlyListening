@@ -124,4 +124,22 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Amount of trailing spaces in output file</value>
   </data>
+  <data name="CHECK_FOR_UPDATES" xml:space="preserve">
+    <value>Check for updates on startup</value>
+  </data>
+  <data name="NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>A newer version is available.</value>
+  </data>
+  <data name="CURRENT_VERSION" xml:space="preserve">
+    <value>Current version:</value>
+  </data>
+  <data name="LATEST_VERSION" xml:space="preserve">
+    <value>Latest version:</value>
+  </data>
+  <data name="OPEN_DOWNLOAD_PAGE" xml:space="preserve">
+    <value>Open download page?</value>
+  </data>
+  <data name="UPDATE_AVAILABLE" xml:space="preserve">
+    <value>Update Available</value>
+  </data>
 </root>

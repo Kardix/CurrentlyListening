@@ -95,4 +95,22 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Počet mezer na konci výstupního souboru</value>
   </data>
+  <data name="CHECK_FOR_UPDATES" xml:space="preserve">
+    <value>Kontrolovat aktualizace při spuštění</value>
+  </data>
+  <data name="NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>Je k dispozici novější verze.</value>
+  </data>
+  <data name="CURRENT_VERSION" xml:space="preserve">
+    <value>Aktuální verze:</value>
+  </data>
+  <data name="LATEST_VERSION" xml:space="preserve">
+    <value>Nejnovější verze:</value>
+  </data>
+  <data name="OPEN_DOWNLOAD_PAGE" xml:space="preserve">
+    <value>Otevřít stránku ke stažení?</value>
+  </data>
+  <data name="UPDATE_AVAILABLE" xml:space="preserve">
+    <value>Dostupná aktualizace</value>
+  </data>
 </root>

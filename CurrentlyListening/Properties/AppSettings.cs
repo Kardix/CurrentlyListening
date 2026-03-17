@@ -13,6 +13,7 @@ public static class AppSettings
     private static bool _showDuration = true;
     private static bool _closeToTray = true;
     private static bool _startMinimized = false;
+    private static bool _checkForUpdates = true;
     public static int _trailingSpacesCount { get; set; }
 
 
@@ -122,6 +123,18 @@ public static class AppSettings
             if (_trailingSpacesCount != value)
             {
                 _trailingSpacesCount = value;
+                SaveSettings(); // Optionally save settings here if you want to persist them.
+            }
+        }
+    }
+    public static bool CheckForUpdates
+    {
+        get { return _checkForUpdates; }
+        set
+        {
+            if (_checkForUpdates != value)
+            {
+                _checkForUpdates = value;
                 SaveSettings(); // Optionally save settings here if you want to persist them.
             }
         }

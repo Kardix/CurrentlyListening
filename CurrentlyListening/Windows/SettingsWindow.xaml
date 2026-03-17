@@ -23,6 +23,11 @@
                   Content="Start the app minimized"
                   Margin="0,0,0,16"
                   Click="StartMinimized_OnClick"/>
+        
+        <CheckBox x:Name="CheckForUpdates"
+                  Content="Check for updates on startup"
+                  Margin="0,0,0,16"
+                  Click="CheckForUpdates_OnClick"/>
 
         
 

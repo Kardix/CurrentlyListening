@@ -95,4 +95,22 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Nombre d'espaces à la fin dans le fichier de sortie</value>
   </data>
+  <data name="CHECK_FOR_UPDATES" xml:space="preserve">
+    <value>Vérifier les mises à jour au démarrage</value>
+  </data>
+  <data name="NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>Une nouvelle version est disponible.</value>
+  </data>
+  <data name="CURRENT_VERSION" xml:space="preserve">
+    <value>Version actuelle :</value>
+  </data>
+  <data name="LATEST_VERSION" xml:space="preserve">
+    <value>Dernière version :</value>
+  </data>
+  <data name="OPEN_DOWNLOAD_PAGE" xml:space="preserve">
+    <value>Ouvrir la page de téléchargement ?</value>
+  </data>
+  <data name="UPDATE_AVAILABLE" xml:space="preserve">
+    <value>Mise à jour disponible</value>
+  </data>
 </root>

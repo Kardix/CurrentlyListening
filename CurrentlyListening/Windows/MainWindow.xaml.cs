@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Windows;
@@ -92,7 +93,9 @@ namespace CurrentlyListening.Windows
             _spotifyPollTimer.Start();
             
             this.Closing += MainWindow_Closing;
-            
+
+            CheckForUpdatesAsync();
+
         }
         
         private void InitializeTray()
@@ -597,6 +600,82 @@ namespace CurrentlyListening.Windows
                     Translations.APP_NAME,
                     Translations.MINIMIZE_NOTIFICATION_TEXT,
                     System.Windows.Forms.ToolTipIcon.Info);
+            }
+        }
+        
+        private static Version GetCurrentVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0, 0, 0);
+        }
+        
+        private static Version ParseVersion(string tag)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+                return new Version(0, 0, 0, 0);
+
+            tag = tag.Trim();
+
+            if (tag.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+                tag = tag.Substring(1);
+
+            return Version.TryParse(tag, out var version)
+                ? version
+                : new Version(0, 0, 0, 0);
+        }
+        
+        private async Task CheckForUpdatesAsync()
+        {
+            try
+            {
+                using var client = _httpClientFactory.CreateClient();
+
+                client.DefaultRequestHeaders.UserAgent.Clear();
+                client.DefaultRequestHeaders.UserAgent.Add(
+                    new ProductInfoHeaderValue("CurrentlyListening", "1.0"));
+
+                var response = await client.GetAsync("https://api.github.com/repos/Kardix/CurrentlyListening/releases/latest");
+
+                if (!response.IsSuccessStatusCode)
+                    return;
+
+                var json = await response.Content.ReadAsStringAsync();
+                var latestRelease = JsonConvert.DeserializeObject<GitHubLatestRelease>(json);
+
+                if (latestRelease == null || string.IsNullOrWhiteSpace(latestRelease.TagName))
+                    return;
+
+                var currentVersion = GetCurrentVersion();
+                var latestVersion = ParseVersion(latestRelease.TagName);
+
+                if (latestVersion > currentVersion)
+                {
+                    var result = MessageBox.Show(
+                        $"{Translations.NEW_VERSION_AVAILABLE}\n\n{Translations.CURRENT_VERSION} {currentVersion}\n{Translations.LATEST_VERSION} {latestVersion}\n\n{Translations.OPEN_DOWNLOAD_PAGE}",
+                        Translations.UPDATE_AVAILABLE,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes && !string.IsNullOrWhiteSpace(latestRelease.HtmlUrl))
+                    {
+                        if (Uri.TryCreate(latestRelease.HtmlUrl, UriKind.Absolute, out var uri))
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = uri.ToString(),
+                                UseShellExecute = true,
+                                Verb = "open"
+                            });
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // optional: log silently, but don't annoy the user on startup
             }
         }
     }

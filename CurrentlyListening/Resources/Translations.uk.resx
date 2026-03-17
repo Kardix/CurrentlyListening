@@ -96,4 +96,22 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Кількість пробілів у кінці вихідного файлу</value>
   </data>
+  <data name="CHECK_FOR_UPDATES" xml:space="preserve">
+    <value>Перевіряти оновлення під час запуску</value>
+  </data>
+  <data name="NEW_VERSION_AVAILABLE" xml:space="preserve">
+    <value>Доступна новіша версія.</value>
+  </data>
+  <data name="CURRENT_VERSION" xml:space="preserve">
+    <value>Поточна версія:</value>
+  </data>
+  <data name="LATEST_VERSION" xml:space="preserve">
+    <value>Остання версія:</value>
+  </data>
+  <data name="OPEN_DOWNLOAD_PAGE" xml:space="preserve">
+    <value>Відкрити сторінку завантаження?</value>
+  </data>
+  <data name="UPDATE_AVAILABLE" xml:space="preserve">
+    <value>Доступне оновлення</value>
+  </data>
 </root>

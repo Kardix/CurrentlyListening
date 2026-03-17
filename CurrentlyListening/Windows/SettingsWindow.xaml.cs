@@ -25,6 +25,7 @@ namespace CurrentlyListening.Windows
             CloseShouldMinimize.Content = Translations.CLOSE_SHOULD_MINIMIZE;
             StartMinimized.Content = Translations.START_MINIMIZED;
             TrailingSpaces.Text = Translations.TRAILING_SPACES_TEXT;
+            CheckForUpdates.Content = Translations.CHECK_FOR_UPDATES;
         }
 
         private void CloseShouldMinimize_OnClick(object sender, RoutedEventArgs e)
@@ -64,6 +65,11 @@ namespace CurrentlyListening.Windows
                 TrailingSpacesSlider.Value = value;
                 _isUpdatingTrailingSpaces = false;
             }
+        }
+
+        private void CheckForUpdates_OnClick(object sender, RoutedEventArgs e)
+        {
+            Properties.AppSettings.CheckForUpdates = CheckForUpdates.IsChecked.HasValue && CheckForUpdates.IsChecked.Value;
         }
     }
 }
