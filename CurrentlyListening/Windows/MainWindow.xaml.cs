@@ -116,25 +116,10 @@ namespace CurrentlyListening.Windows
                 Visible = true,
                 ContextMenuStrip = _trayMenu
             };
+            
             m_notifyIcon.MouseClick += (s, e) =>
             {
-                if (e.Button == MouseButtons.Left)
-                {
-                    // Left click logic
-                    if (WindowState == WindowState.Minimized)
-                    {
-                        WindowState = WindowState.Normal;
-                        Show();
-                    }
-                    else
-                    {
-                        WindowState = WindowState.Minimized;
-                        Hide();
-                    }
-                    
-                    Activate();
-                }
-                else if (e.Button == MouseButtons.Right)
+                if (e.Button == MouseButtons.Right)
                 {
                     // Right click logic
                     // Usually you don't need this if using ContextMenuStrip
@@ -142,13 +127,22 @@ namespace CurrentlyListening.Windows
                     _trayMenu.Show();
                 }
             };
-            
+
             m_notifyIcon.DoubleClick += (s, e) =>
             {
-                Show();
-                WindowState = WindowState.Normal;
-                Activate();
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (!IsVisible)
+                        Show();
+
+                    if (WindowState == WindowState.Minimized)
+                        WindowState = WindowState.Normal;
+
+                    ShowInTaskbar = true;
+                    Activate();
+                }));
             };
+
             
         }
         
@@ -677,6 +671,25 @@ namespace CurrentlyListening.Windows
             {
                 // optional: log silently, but don't annoy the user on startup
             }
+        }
+        
+        private void RestoreFromTray()
+        {
+            if (!IsVisible)
+            {
+                Show();
+            }
+
+            if (WindowState == WindowState.Minimized)
+            {
+                WindowState = WindowState.Normal;
+            }
+
+            ShowInTaskbar = true;
+            Activate();
+            Topmost = true;
+            Topmost = false;
+            Focus();
         }
     }
 }
