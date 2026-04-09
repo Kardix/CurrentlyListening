@@ -401,6 +401,14 @@ namespace CurrentlyListening.Windows
                 if (string.IsNullOrEmpty(content))
                 {
                     output = Translations.NOTHING_PLAYING;
+                    if (AppSettings.TrailingSpacesCount != 0)
+                    {
+                        for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
+                        {
+                            output += " ";
+                        }
+                    }
+                    _isPlaying = false;
                     OutputBox.Text = output;
                     File.WriteAllText(_outputFilePath, output);
                 }
@@ -412,6 +420,13 @@ namespace CurrentlyListening.Windows
 
                     string trackId = json.Item.Id;
                     _isPlaying = Convert.ToBoolean(json.IsPlaying);
+                    if (!_isPlaying)
+                    {
+                        output = Translations.NOTHING_PLAYING;
+                        
+                        OutputBox.Text = output;
+                        File.WriteAllText(_outputFilePath, output);
+                    }
                     string artist = json.Item.Artists[0].Name ?? Translations.UNKNOWN_ARTIST;
                     string title = json.Item.Name ?? Translations.UNKNOWN_TITLE;
                     int progressMs = Convert.ToInt32(json.ProgressMs ?? 0);
@@ -460,6 +475,21 @@ namespace CurrentlyListening.Windows
 
         private void UpdateDisplayedText()
         {
+            if (!_isPlaying)
+            {
+                output = Translations.NOTHING_PLAYING;
+                if (AppSettings.TrailingSpacesCount != 0)
+                {
+                    for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
+                    {
+                        output += " ";
+                    }
+                }
+                OutputBox.Text = output;
+                File.WriteAllText(_outputFilePath, output);
+                return;
+            }
+            
             if (string.IsNullOrEmpty(_currentTrackId))
             {
                 OutputBox.Text = output;
