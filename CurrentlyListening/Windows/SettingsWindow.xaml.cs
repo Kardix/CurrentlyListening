@@ -14,29 +14,35 @@ namespace CurrentlyListening.Windows
             // Load current setting into UI
             AppSettings.LoadSettings();
             NameLabels();
-            CloseShouldMinimize.IsChecked = Properties.AppSettings.CloseToTray;
+            CloseShouldMinimize.IsChecked = AppSettings.CloseToTray;
             StartMinimized.IsChecked = AppSettings.StartMinimized;
             CheckForUpdates.IsChecked = AppSettings.CheckForUpdates;
-            TrailingSpacesSlider.Value = Properties.AppSettings.TrailingSpacesCount;
-            TrailingSpacesTextBox.Text = Properties.AppSettings.TrailingSpacesCount.ToString();
+            TrailingSpacesSlider.Value = AppSettings.TrailingSpacesCount;
+            TrailingSpacesTextBox.Text = AppSettings.TrailingSpacesCount.ToString();
+            ShowPopUpOnFail.IsChecked = AppSettings.ShowPopupOnFail;
+            
         }
 
         private void NameLabels()
         {
+            WindowSettings.Title = Translations.SETTINGS;
+            SettingsLabel.Text = Translations.SETTINGS_GENERAL;
             CloseShouldMinimize.Content = Translations.CLOSE_SHOULD_MINIMIZE;
             StartMinimized.Content = Translations.START_MINIMIZED;
             TrailingSpaces.Text = Translations.TRAILING_SPACES_TEXT;
             CheckForUpdates.Content = Translations.CHECK_FOR_UPDATES;
+            ShowPopUpOnFail.Content = Translations.AUTH_FAIL_POPUP;
+            
         }
 
         private void CloseShouldMinimize_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.CloseToTray = CloseShouldMinimize.IsChecked.HasValue && CloseShouldMinimize.IsChecked.Value;
+            AppSettings.CloseToTray = CloseShouldMinimize.IsChecked.HasValue && CloseShouldMinimize.IsChecked.Value;
         }
 
         private void StartMinimized_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.StartMinimized = StartMinimized.IsChecked.HasValue && StartMinimized.IsChecked.Value;
+            AppSettings.StartMinimized = StartMinimized.IsChecked.HasValue && StartMinimized.IsChecked.Value;
         }
         private bool _isUpdatingTrailingSpaces;
         private void TrailingSpacesSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -71,7 +77,17 @@ namespace CurrentlyListening.Windows
 
         private void CheckForUpdates_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.CheckForUpdates = CheckForUpdates.IsChecked.HasValue && CheckForUpdates.IsChecked.Value;
+            AppSettings.CheckForUpdates = CheckForUpdates.IsChecked.HasValue && CheckForUpdates.IsChecked.Value;
+        }
+
+        private void ShowPopUpOnFail_OnClick(object sender, RoutedEventArgs e)
+        {
+            AppSettings.ShowPopupOnFail =
+                ShowPopUpOnFail.IsChecked.HasValue && ShowPopUpOnFail.IsChecked.Value;
         }
     }
 }
+// This software is licensed under CC BY-NC-ND 4.0.
+// Free for personal, non-commercial use only.
+// Do not modify, distribute, or sell without written permission.
+// (c) 2026 Tom "TKoNoR"

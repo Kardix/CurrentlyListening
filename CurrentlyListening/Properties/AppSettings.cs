@@ -15,6 +15,7 @@ public static class AppSettings
     private static bool _closeToTray = true;
     private static bool _startMinimized = false;
     private static bool _checkForUpdates = true;
+    private static bool _showPopupOnFail = true;
     public static int _trailingSpacesCount { get; set; }
 
 
@@ -137,6 +138,20 @@ public static class AppSettings
             {
                 _checkForUpdates = value;
                 SaveSettings(); // Optionally save settings here if you want to persist them.
+            }
+        }
+    }
+
+    // Field to determine if the "login failed" should retry the login via browser
+    public static bool ShowPopupOnFail
+    {
+        get { return _showPopupOnFail; }
+        set
+        {
+            if (_showPopupOnFail != value)
+            {
+                _showPopupOnFail = value;
+                SaveSettings();
             }
         }
     }

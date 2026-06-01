@@ -69,6 +69,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zobrazit vyskakovací okno, když se ověření nezdaří.
+        /// </summary>
+        internal static string AUTH_FAIL_POPUP {
+            get {
+                return ResourceManager.GetString("AUTH_FAIL_POPUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autorizace byla úspěšná. Můžete zavřít toto okno..
         /// </summary>
         internal static string AUTH_SUCCESS {
@@ -258,6 +267,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ověření se nezdařilo. Chcete to zkusit znovu s uloženými přihlašovacími údaji?.
+        /// </summary>
+        internal static string LOGIN_POPUP_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Přihlásit se ke Spotify.
         /// </summary>
         internal static string LOGIN_SPOTIFY {
@@ -341,9 +359,18 @@ namespace CurrentlyListening.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Nastavení.
         /// </summary>
-        internal static string Settings {
+        internal static string SETTINGS {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obecná nastavení.
+        /// </summary>
+        internal static string SETTINGS_GENERAL {
+            get {
+                return ResourceManager.GetString("SETTINGS_GENERAL", resourceCulture);
             }
         }
         

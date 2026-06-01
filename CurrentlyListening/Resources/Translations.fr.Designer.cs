@@ -69,6 +69,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Afficher une fenêtre contextuelle en cas d’échec de l’authentification.
+        /// </summary>
+        internal static string AUTH_FAIL_POPUP {
+            get {
+                return ResourceManager.GetString("AUTH_FAIL_POPUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autorisation réussie. Vous pouvez fermer cette fenêtre..
         /// </summary>
         internal static string AUTH_SUCCESS {
@@ -258,6 +267,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to L’authentification a échoué. Souhaitez-vous réessayer avec les identifiants enregistrés ?.
+        /// </summary>
+        internal static string LOGIN_POPUP_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Se connecter à Spotify.
         /// </summary>
         internal static string LOGIN_SPOTIFY {
@@ -341,9 +359,18 @@ namespace CurrentlyListening.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Paramètres.
         /// </summary>
-        internal static string Settings {
+        internal static string SETTINGS {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres généraux.
+        /// </summary>
+        internal static string SETTINGS_GENERAL {
+            get {
+                return ResourceManager.GetString("SETTINGS_GENERAL", resourceCulture);
             }
         }
         

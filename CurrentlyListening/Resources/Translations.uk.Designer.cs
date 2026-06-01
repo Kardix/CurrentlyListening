@@ -69,6 +69,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Показувати спливаюче вікно, якщо автентифікація не вдасться.
+        /// </summary>
+        internal static string AUTH_FAIL_POPUP {
+            get {
+                return ResourceManager.GetString("AUTH_FAIL_POPUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Авторизація успішна. Ви можете закрити це 
         ///        вікно..
         /// </summary>
@@ -259,6 +268,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Не вдалося пройти автентифікацію. Спробувати ще раз із збереженими обліковими даними?.
+        /// </summary>
+        internal static string LOGIN_POPUP_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Увійти в Spotify.
         /// </summary>
         internal static string LOGIN_SPOTIFY {
@@ -342,9 +360,18 @@ namespace CurrentlyListening.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Налаштування.
         /// </summary>
-        internal static string Settings {
+        internal static string SETTINGS {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Загальні налаштування.
+        /// </summary>
+        internal static string SETTINGS_GENERAL {
+            get {
+                return ResourceManager.GetString("SETTINGS_GENERAL", resourceCulture);
             }
         }
         

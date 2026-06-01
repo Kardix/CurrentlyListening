@@ -69,6 +69,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pokaż wyskakujące okno, gdy uwierzytelnianie się nie powiedzie.
+        /// </summary>
+        internal static string AUTH_FAIL_POPUP {
+            get {
+                return ResourceManager.GetString("AUTH_FAIL_POPUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autoryzacja zakończona sukcesem. Możesz zamknąć to okno..
         /// </summary>
         internal static string AUTH_SUCCESS {
@@ -258,6 +267,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uwierzytelnianie nie powiodło się. Czy chcesz spróbować ponownie, używając zapisanych danych logowania?.
+        /// </summary>
+        internal static string LOGIN_POPUP_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zaloguj się do Spotify.
         /// </summary>
         internal static string LOGIN_SPOTIFY {
@@ -341,9 +359,18 @@ namespace CurrentlyListening.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ustawienia.
         /// </summary>
-        internal static string Settings {
+        internal static string SETTINGS {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ustawienia ogólne.
+        /// </summary>
+        internal static string SETTINGS_GENERAL {
+            get {
+                return ResourceManager.GetString("SETTINGS_GENERAL", resourceCulture);
             }
         }
         

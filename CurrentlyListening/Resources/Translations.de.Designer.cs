@@ -69,6 +69,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pop-up anzeigen, wenn die Authentifizierung fehlschlägt.
+        /// </summary>
+        internal static string AUTH_FAIL_POPUP {
+            get {
+                return ResourceManager.GetString("AUTH_FAIL_POPUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autorisierung erfolgreich. Sie können dieses Fenster schließen..
         /// </summary>
         internal static string AUTH_SUCCESS {
@@ -258,6 +267,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Die Authentifizierung ist fehlgeschlagen. Möchten Sie es mit den gespeicherten Anmeldedaten erneut versuchen?.
+        /// </summary>
+        internal static string LOGIN_POPUP_TEXT {
+            get {
+                return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bei Spotify anmelden.
         /// </summary>
         internal static string LOGIN_SPOTIFY {
@@ -341,9 +359,18 @@ namespace CurrentlyListening.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Einstellungen.
         /// </summary>
-        internal static string Settings {
+        internal static string SETTINGS {
             get {
-                return ResourceManager.GetString("Settings", resourceCulture);
+                return ResourceManager.GetString("SETTINGS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allgemeine Einstellungen.
+        /// </summary>
+        internal static string SETTINGS_GENERAL {
+            get {
+                return ResourceManager.GetString("SETTINGS_GENERAL", resourceCulture);
             }
         }
         

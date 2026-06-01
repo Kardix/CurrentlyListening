@@ -57,19 +57,19 @@ namespace CurrentlyListening.Windows
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
             
-            Properties.AppSettings.LoadSettings();
+            AppSettings.LoadSettings();
             
             InitializeComponent();
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(Properties.AppSettings.LangCode);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(Properties.AppSettings.LangCode);
-            ArtistCheckbox.IsChecked = Properties.AppSettings.ShowArtist;
-            TitleCheckbox.IsChecked = Properties.AppSettings.ShowTitle;
-            DurationCheckbox.IsChecked = Properties.AppSettings.ShowDuration;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(AppSettings.LangCode);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(AppSettings.LangCode);
+            ArtistCheckbox.IsChecked = AppSettings.ShowArtist;
+            TitleCheckbox.IsChecked = AppSettings.ShowTitle;
+            DurationCheckbox.IsChecked = AppSettings.ShowDuration;
             LanguageSelector.SelectionChanged -= LanguageSelector_SelectionChanged;
             
             foreach (var item in LanguageSelector.Items)
             {
-                if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == Properties.AppSettings.LangCode)
+                if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == AppSettings.LangCode)
                 {
                     LanguageSelector.SelectedItem = comboItem;
                     break;
@@ -80,7 +80,7 @@ namespace CurrentlyListening.Windows
             m_notifyIcon = new NotifyIcon();
             InitializeTray();
             NameLabels();
-            _outputFilePath = Properties.AppSettings.OutputFilePath;
+            _outputFilePath = AppSettings.OutputFilePath;
             _httpClientFactory = httpClientFactory;
             _ = LoadTokens();
 
@@ -92,7 +92,7 @@ namespace CurrentlyListening.Windows
             _spotifyPollTimer.Tick += async (s, e) => await UpdateTrackInfo();
             _spotifyPollTimer.Start();
             
-            this.Closing += MainWindow_Closing;
+            Closing += MainWindow_Closing;
 
             CheckForUpdatesAsync();
 
@@ -150,7 +150,7 @@ namespace CurrentlyListening.Windows
         {
             m_notifyIcon.Visible = false;
             m_notifyIcon.Dispose();
-            this.Closing -= MainWindow_Closing;
+            Closing -= MainWindow_Closing;
             Application.Current.Shutdown();
         }
         
@@ -185,7 +185,7 @@ namespace CurrentlyListening.Windows
             ClientSecretText.Text = Translations.CLIENT_SECRET;
             CreatedBy.Text = Translations.CREATED_BY;
             exitItem.Text = Translations.CLOSE;
-            Settings.Content = Translations.Settings;
+            Settings.Content = Translations.SETTINGS;
 
         }
 
@@ -200,8 +200,8 @@ namespace CurrentlyListening.Windows
 
             if (dialog.ShowDialog() == true)
             {
-                Properties.AppSettings.OutputFilePath = dialog.FileName;
-                Properties.AppSettings.SaveSettings(); // persist to disk
+                AppSettings.OutputFilePath = dialog.FileName;
+                AppSettings.SaveSettings(); // persist to disk
 
                 MessageBox.Show(Translations.FILE_SAVED, Translations.FILE_SAVED_CAPTION, MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -366,6 +366,17 @@ namespace CurrentlyListening.Windows
                 output = Translations.LOGIN_FAILED;
                 OutputBox.Text = output;
                 File.WriteAllText(_outputFilePath, output);
+                if (AppSettings.ShowPopupOnFail)
+                {
+                    var result = MessageBox.Show(
+                        $"{Translations.LOGIN_POPUP_TEXT}",
+                        Translations.UPDATE_AVAILABLE,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+                    if (result == MessageBoxResult.Yes)
+                        LoginButton_Click(null, null);
+                }
+
                 return;
             }
 
@@ -575,9 +586,9 @@ namespace CurrentlyListening.Windows
                 {
                     Thread.CurrentThread.CurrentUICulture = new CultureInfo(cultureCode);
                     Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureCode);
-                    Properties.AppSettings.LangCode = cultureCode;
+                    AppSettings.LangCode = cultureCode;
                     // Optionally, save to settings
-                    Properties.AppSettings.SaveSettings();
+                    AppSettings.SaveSettings();
                     NameLabels();
                 }
             }
@@ -586,6 +597,8 @@ namespace CurrentlyListening.Windows
         private void UseCustomCredentialsCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             CustomCredentialsPanel.Visibility = Visibility.Visible;
+            ClientIdTextBox.Text = _clientId;
+            ClientSecretTextBox.Text = _clientSecret;
         }
 
         private void UseCustomCredentialsCheckbox_Unchecked(object sender, RoutedEventArgs e)
@@ -595,22 +608,22 @@ namespace CurrentlyListening.Windows
 
         private void DurationCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
+            AppSettings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
         }
 
         private void TitleCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.ShowTitle = TitleCheckbox.IsChecked.HasValue && TitleCheckbox.IsChecked.Value;
+            AppSettings.ShowTitle = TitleCheckbox.IsChecked.HasValue && TitleCheckbox.IsChecked.Value;
         }
 
         private void ArtistCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            Properties.AppSettings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
+            AppSettings.ShowArtist = ArtistCheckbox.IsChecked.HasValue && ArtistCheckbox.IsChecked.Value;
         }
 
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (Properties.AppSettings.CloseToTray)
+            if (AppSettings.CloseToTray)
             {
                 // Cancel normal close
                 e.Cancel = true;
@@ -623,7 +636,7 @@ namespace CurrentlyListening.Windows
                     2000,
                     Translations.APP_NAME,
                     Translations.MINIMIZE_NOTIFICATION_TEXT,
-                    System.Windows.Forms.ToolTipIcon.Info);
+                    ToolTipIcon.Info);
             }
         }
         
@@ -726,4 +739,4 @@ namespace CurrentlyListening.Windows
 // This software is licensed under CC BY-NC-ND 4.0.
 // Free for personal, non-commercial use only.
 // Do not modify, distribute, or sell without written permission.
-// (c) 2025 Tom "TKoNoR"
+// (c) 2026 Tom "TKoNoR"

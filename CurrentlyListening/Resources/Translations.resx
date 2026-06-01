@@ -118,7 +118,7 @@
   <data name="CLOSE_SHOULD_MINIMIZE" xml:space="preserve">
     <value>Minimize to tray when closing</value>
   </data>
-  <data name="Settings" xml:space="preserve">
+  <data name="SETTINGS" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
@@ -141,5 +141,14 @@
   </data>
   <data name="UPDATE_AVAILABLE" xml:space="preserve">
     <value>Update Available</value>
+  </data>
+  <data name="LOGIN_POPUP_TEXT" xml:space="preserve">
+    <value>Something went wrong during sign-in. Would you like to retry with the saved data?</value>
+  </data>
+  <data name="AUTH_FAIL_POPUP" xml:space="preserve">
+    <value>Show a pop-up when authentication fails</value>
+  </data>
+  <data name="SETTINGS_GENERAL" xml:space="preserve">
+    <value>General Settings</value>
   </data>
 </root>

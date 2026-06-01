@@ -90,7 +90,7 @@
   <data name="START_MINIMIZED" xml:space="preserve">
     <value>Запускати згорнутим у системному треї</value>
   </data>
-  <data name="Settings" xml:space="preserve">
+  <data name="SETTINGS" xml:space="preserve">
     <value>Налаштування</value>
   </data>
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
@@ -113,5 +113,14 @@
   </data>
   <data name="UPDATE_AVAILABLE" xml:space="preserve">
     <value>Доступне оновлення</value>
+  </data>
+  <data name="LOGIN_POPUP_TEXT" xml:space="preserve">
+    <value>Не вдалося пройти автентифікацію. Спробувати ще раз із збереженими обліковими даними?</value>
+  </data>
+  <data name="AUTH_FAIL_POPUP" xml:space="preserve">
+    <value>Показувати спливаюче вікно, якщо автентифікація не вдасться</value>
+  </data>
+  <data name="SETTINGS_GENERAL" xml:space="preserve">
+    <value>Загальні налаштування</value>
   </data>
 </root>

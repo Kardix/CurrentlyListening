@@ -89,7 +89,7 @@
   <data name="START_MINIMIZED" xml:space="preserve">
     <value>Uruchamiaj zminimalizowaną w zasobniku</value>
   </data>
-  <data name="Settings" xml:space="preserve">
+  <data name="SETTINGS" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
@@ -112,5 +112,14 @@
   </data>
   <data name="UPDATE_AVAILABLE" xml:space="preserve">
     <value>Dostępna aktualizacja</value>
+  </data>
+  <data name="LOGIN_POPUP_TEXT" xml:space="preserve">
+    <value>Uwierzytelnianie nie powiodło się. Czy chcesz spróbować ponownie, używając zapisanych danych logowania?</value>
+  </data>
+  <data name="AUTH_FAIL_POPUP" xml:space="preserve">
+    <value>Pokaż wyskakujące okno, gdy uwierzytelnianie się nie powiedzie</value>
+  </data>
+  <data name="SETTINGS_GENERAL" xml:space="preserve">
+    <value>Ustawienia ogólne</value>
   </data>
 </root>

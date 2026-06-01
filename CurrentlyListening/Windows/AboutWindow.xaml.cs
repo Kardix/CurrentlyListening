@@ -21,4 +21,4 @@ namespace CurrentlyListening.Windows
 // This software is licensed under CC BY-NC-ND 4.0.
 // Free for personal, non-commercial use only.
 // Do not modify, distribute, or sell without written permission.
-// (c) 2025 Tom "TKoNoR
+// (c) 2026 Tom "TKoNoR
