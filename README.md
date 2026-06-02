@@ -2,8 +2,8 @@
 
 **CurrentlyListening** is a free desktop utility that lets you export the currently playing song on Spotify to a simple text file, updated in real-time. Perfect for stream overlays, OBS integrations, or personal use.
 
-![image](https://github.com/user-attachments/assets/b1f98012-7269-4beb-8505-892f57aab1cd)
-![image](https://github.com/user-attachments/assets/b44738e7-cb9c-46f5-91be-e0cddb2df8d7)
+![image](https://github.com/user-attachments/assets/8c038176-f8b1-4786-9953-934683e85718)
+![image](https://github.com/user-attachments/assets/298eb16d-8391-4bae-bf3e-acdabfa70752)
 ![image](https://github.com/user-attachments/assets/db0baaf4-e095-4d31-87ab-0464b9304bca)
 ![image](https://github.com/user-attachments/assets/29c8d947-0e4a-47dd-ba53-fb597504840e)
 
