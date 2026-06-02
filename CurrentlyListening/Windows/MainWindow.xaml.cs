@@ -598,6 +598,7 @@ namespace CurrentlyListening.Windows
         private void UseCustomCredentialsCheckbox_Checked(object sender, RoutedEventArgs e)
         {
             CustomCredentialsPanel.Visibility = Visibility.Visible;
+            Window.Height += 80;
             ClientIdTextBox.Text = _clientId;
             ClientSecretTextBox.Text = _clientSecret;
         }
@@ -605,6 +606,7 @@ namespace CurrentlyListening.Windows
         private void UseCustomCredentialsCheckbox_Unchecked(object sender, RoutedEventArgs e)
         {
             CustomCredentialsPanel.Visibility = Visibility.Collapsed;
+            Window.Height -= 80;
         }
 
         private void DurationCheckbox_OnClick(object sender, RoutedEventArgs e)
