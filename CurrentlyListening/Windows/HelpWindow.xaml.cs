@@ -15,6 +15,7 @@ public partial class HelpWindow : Window
     public HelpWindow()
     {
         InitializeComponent();
+        TopBar.Text = Translations.HELP;
         HowToUse.Text = Translations.HOW_TO_USE_APP;
         Help1.AppendText(Translations.HELP_1_0 + " ");
         var hyperlink = new Hyperlink(new Run("https://developer.spotify.com/dashboard"))
@@ -47,6 +48,11 @@ public partial class HelpWindow : Window
     {
         Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
         e.Handled = true;
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.

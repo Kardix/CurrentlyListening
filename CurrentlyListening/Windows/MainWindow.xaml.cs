@@ -11,6 +11,7 @@ using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
 using CurrentlyListening.Models;
 using CurrentlyListening.Properties;
@@ -107,7 +108,7 @@ namespace CurrentlyListening.Windows
 
             _trayMenu.Items.Add(exitItem);
 
-            var uri = new Uri("pack://application:,,,/Resources/20250507_2010_Green_Play_Icon_simple_compose_01jtnvk6jcegmaa6be56qpgkgj-removebg-preview.ico");
+            var uri = new Uri("pack://application:,,,/Resources/icon.ico");
             var streamInfo = Application.GetResourceStream(uri);
             m_notifyIcon = new NotifyIcon
             {
@@ -716,23 +717,37 @@ namespace CurrentlyListening.Windows
             }
         }
         
-        private void RestoreFromTray()
+        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!IsVisible)
+            if (e.ClickCount == 2)
             {
-                Show();
+                ToggleMaximize();
+                return;
             }
 
-            if (WindowState == WindowState.Minimized)
-            {
-                WindowState = WindowState.Normal;
-            }
+            DragMove();
+        }
 
-            ShowInTaskbar = true;
-            Activate();
-            Topmost = true;
-            Topmost = false;
-            Focus();
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            ToggleMaximize();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void ToggleMaximize()
+        {
+            WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
         }
     }
 }

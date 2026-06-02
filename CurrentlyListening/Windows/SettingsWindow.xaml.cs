@@ -25,7 +25,7 @@ namespace CurrentlyListening.Windows
 
         private void NameLabels()
         {
-            WindowSettings.Title = Translations.SETTINGS;
+            WindowSettings.Text = Translations.SETTINGS;
             SettingsLabel.Text = Translations.SETTINGS_GENERAL;
             CloseShouldMinimize.Content = Translations.CLOSE_SHOULD_MINIMIZE;
             StartMinimized.Content = Translations.START_MINIMIZED;
@@ -84,6 +84,11 @@ namespace CurrentlyListening.Windows
         {
             AppSettings.ShowPopupOnFail =
                 ShowPopUpOnFail.IsChecked.HasValue && ShowPopUpOnFail.IsChecked.Value;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

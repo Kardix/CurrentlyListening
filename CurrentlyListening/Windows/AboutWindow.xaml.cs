@@ -16,6 +16,11 @@ namespace CurrentlyListening.Windows
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
             e.Handled = true;
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.
