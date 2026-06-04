@@ -101,8 +101,8 @@
   <data name="NEW_VERSION_AVAILABLE" xml:space="preserve">
     <value>Dostępna jest nowsza wersja.</value>
   </data>
-  <data name="OPEN_DOWNLOAD_PAGE" xml:space="preserve">
-    <value>Otworzyć stronę pobierania?</value>
+  <data name="INSTALL_UPDATE" xml:space="preserve">
+    <value>Zainstalować aktualizację?</value>
   </data>
   <data name="CURRENT_VERSION" xml:space="preserve">
     <value>Aktualna wersja:</value>

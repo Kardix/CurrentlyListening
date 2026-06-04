@@ -57,9 +57,8 @@ namespace CurrentlyListening.Windows
 
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
-            
             AppSettings.LoadSettings();
-            
+
             InitializeComponent();
             Thread.CurrentThread.CurrentCulture = new CultureInfo(AppSettings.LangCode);
             Thread.CurrentThread.CurrentUICulture = new CultureInfo(AppSettings.LangCode);
@@ -67,7 +66,7 @@ namespace CurrentlyListening.Windows
             TitleCheckbox.IsChecked = AppSettings.ShowTitle;
             DurationCheckbox.IsChecked = AppSettings.ShowDuration;
             LanguageSelector.SelectionChanged -= LanguageSelector_SelectionChanged;
-            
+
             foreach (var item in LanguageSelector.Items)
             {
                 if (item is ComboBoxItem comboItem && comboItem.Tag?.ToString() == AppSettings.LangCode)
@@ -92,13 +91,12 @@ namespace CurrentlyListening.Windows
             _spotifyPollTimer.Interval = TimeSpan.FromSeconds(5);
             _spotifyPollTimer.Tick += async (s, e) => await UpdateTrackInfo();
             _spotifyPollTimer.Start();
-            
+
             Closing += MainWindow_Closing;
 
             CheckForUpdatesAsync();
-
         }
-        
+
         private void InitializeTray()
         {
             _trayMenu = new ContextMenuStrip();
@@ -112,12 +110,11 @@ namespace CurrentlyListening.Windows
             var streamInfo = Application.GetResourceStream(uri);
             m_notifyIcon = new NotifyIcon
             {
-                
                 Icon = new System.Drawing.Icon(streamInfo.Stream), // or your app icon
                 Visible = true,
                 ContextMenuStrip = _trayMenu
             };
-            
+
             m_notifyIcon.MouseClick += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
@@ -143,10 +140,8 @@ namespace CurrentlyListening.Windows
                     Activate();
                 }));
             };
-
-            
         }
-        
+
         private void ExitItem_Click(object sender, EventArgs e)
         {
             m_notifyIcon.Visible = false;
@@ -154,19 +149,19 @@ namespace CurrentlyListening.Windows
             Closing -= MainWindow_Closing;
             Application.Current.Shutdown();
         }
-        
+
         void OnClose(object sender, CancelEventArgs args)
         {
             if (WindowState == WindowState.Normal)
             {
                 Hide();
-                if(m_notifyIcon != null)
+                if (m_notifyIcon != null)
                     m_notifyIcon.ShowBalloonTip(2000);
             }
             else
                 WindowState = WindowState.Normal;
         }
-        
+
         private void NameLabels()
         {
             m_notifyIcon.BalloonTipText = Translations.MINIMIZE_NOTIFICATION_TEXT;
@@ -187,7 +182,6 @@ namespace CurrentlyListening.Windows
             CreatedBy.Text = Translations.CREATED_BY;
             exitItem.Text = Translations.CLOSE;
             Settings.Content = Translations.SETTINGS;
-
         }
 
         private void SetOutputFileButton_Click(object sender, RoutedEventArgs e)
@@ -420,6 +414,7 @@ namespace CurrentlyListening.Windows
                             output += " ";
                         }
                     }
+
                     _isPlaying = false;
                     OutputBox.Text = output;
                     File.WriteAllText(_outputFilePath, output);
@@ -435,10 +430,11 @@ namespace CurrentlyListening.Windows
                     if (!_isPlaying)
                     {
                         output = Translations.NOTHING_PLAYING;
-                        
+
                         OutputBox.Text = output;
                         File.WriteAllText(_outputFilePath, output);
                     }
+
                     string artist = json.Item.Artists[0].Name ?? Translations.UNKNOWN_ARTIST;
                     string title = json.Item.Name ?? Translations.UNKNOWN_TITLE;
                     int progressMs = Convert.ToInt32(json.ProgressMs ?? 0);
@@ -464,6 +460,7 @@ namespace CurrentlyListening.Windows
                         if (!string.IsNullOrEmpty(output)) output += " ";
                         output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
                     }
+
                     if (AppSettings.TrailingSpacesCount != 0)
                     {
                         for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
@@ -497,11 +494,12 @@ namespace CurrentlyListening.Windows
                         output += " ";
                     }
                 }
+
                 OutputBox.Text = output;
                 File.WriteAllText(_outputFilePath, output);
                 return;
             }
-            
+
             if (string.IsNullOrEmpty(_currentTrackId))
             {
                 OutputBox.Text = output;
@@ -570,7 +568,7 @@ namespace CurrentlyListening.Windows
             helpWindow.Owner = this;
             helpWindow.ShowDialog();
         }
-        
+
         private void OpenSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingsWindow = new SettingsWindow();
@@ -611,7 +609,7 @@ namespace CurrentlyListening.Windows
 
         private void DurationCheckbox_OnClick(object sender, RoutedEventArgs e)
         {
-            AppSettings.ShowDuration =  DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
+            AppSettings.ShowDuration = DurationCheckbox.IsChecked.HasValue && DurationCheckbox.IsChecked.Value;
         }
 
         private void TitleCheckbox_OnClick(object sender, RoutedEventArgs e)
@@ -642,12 +640,12 @@ namespace CurrentlyListening.Windows
                     ToolTipIcon.Info);
             }
         }
-        
+
         private static Version GetCurrentVersion()
         {
             return Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0, 0, 0);
         }
-        
+
         private static Version ParseVersion(string tag)
         {
             if (string.IsNullOrWhiteSpace(tag))
@@ -662,7 +660,7 @@ namespace CurrentlyListening.Windows
                 ? version
                 : new Version(0, 0, 0, 0);
         }
-        
+
         private async Task CheckForUpdatesAsync()
         {
             try
@@ -673,7 +671,8 @@ namespace CurrentlyListening.Windows
                 client.DefaultRequestHeaders.UserAgent.Add(
                     new ProductInfoHeaderValue("CurrentlyListening", "1.0"));
 
-                var response = await client.GetAsync("https://api.github.com/repos/Kardix/CurrentlyListening/releases/latest");
+                var response =
+                    await client.GetAsync("https://api.github.com/repos/Kardix/CurrentlyListening/releases/latest");
 
                 if (!response.IsSuccessStatusCode)
                     return;
@@ -690,26 +689,16 @@ namespace CurrentlyListening.Windows
                 if (latestVersion > currentVersion)
                 {
                     var result = MessageBox.Show(
-                        $"{Translations.NEW_VERSION_AVAILABLE}\n\n{Translations.CURRENT_VERSION} {currentVersion}\n{Translations.LATEST_VERSION} {latestVersion}\n\n{Translations.OPEN_DOWNLOAD_PAGE}",
+                        $"{Translations.NEW_VERSION_AVAILABLE}\n\n{Translations.CURRENT_VERSION} {currentVersion}\n{Translations.LATEST_VERSION} {latestVersion}\n\n{Translations.INSTALL_UPDATE}",
                         Translations.UPDATE_AVAILABLE,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Information);
 
-                    if (result == MessageBoxResult.Yes && !string.IsNullOrWhiteSpace(latestRelease.HtmlUrl))
+                    if (result == MessageBoxResult.Yes &&
+                        !string.IsNullOrWhiteSpace(latestRelease.Assets.FirstOrDefault()?.BrowserDownloadUrl
+                            .ToString()))
                     {
-                        if (Uri.TryCreate(latestRelease.HtmlUrl, UriKind.Absolute, out var uri))
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = uri.ToString(),
-                                UseShellExecute = true,
-                                Verb = "open"
-                            });
-                        }
-                        else
-                        {
-                            
-                        }
+                        await DownloadAndInstallUpdateAsync(latestRelease.Assets.FirstOrDefault()?.BrowserDownloadUrl);
                     }
                 }
             }
@@ -718,7 +707,48 @@ namespace CurrentlyListening.Windows
                 // optional: log silently, but don't annoy the user on startup
             }
         }
-        
+
+        private async Task DownloadAndInstallUpdateAsync(Uri installerUrl)
+        {
+            try
+            {
+                using var client = _httpClientFactory.CreateClient();
+
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("CurrentlyListening");
+
+                var tempInstallerPath = Path.Combine(
+                    Path.GetTempPath(),
+                    "CurrentlyListening.Update.exe");
+
+                await using (var stream = await client.GetStreamAsync(installerUrl))
+                await using (var fileStream = new FileStream(
+                                 tempInstallerPath,
+                                 FileMode.Create,
+                                 FileAccess.Write,
+                                 FileShare.None))
+                {
+                    await stream.CopyToAsync(fileStream);
+                }
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = tempInstallerPath,
+                    Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RESTARTAPPLICATIONS",
+                    UseShellExecute = true
+                });
+
+                Application.Current.Shutdown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Update failed: {ex.Message}",
+                    "Update failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
         private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)

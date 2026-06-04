@@ -249,6 +249,15 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installer la mise à jour ?.
+        /// </summary>
+        internal static string INSTALL_UPDATE {
+            get {
+                return ResourceManager.GetString("INSTALL_UPDATE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dernière version :.
         /// </summary>
         internal static string LATEST_VERSION {
@@ -317,15 +326,6 @@ namespace CurrentlyListening.Resources {
         internal static string NOTHING_PLAYING {
             get {
                 return ResourceManager.GetString("NOTHING_PLAYING", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ouvrir la page de téléchargement ?.
-        /// </summary>
-        internal static string OPEN_DOWNLOAD_PAGE {
-            get {
-                return ResourceManager.GetString("OPEN_DOWNLOAD_PAGE", resourceCulture);
             }
         }
         
