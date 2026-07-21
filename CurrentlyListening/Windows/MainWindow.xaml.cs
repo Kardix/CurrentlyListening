@@ -393,13 +393,20 @@ namespace CurrentlyListening.Windows
                 using var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", _tokens.AccessToken);
+                
                 var response = await client.GetAsync("https://api.spotify.com/v1/me/player/currently-playing");
                 if (!response.IsSuccessStatusCode)
                 {
-                    _tokens = new SpotifyToken();
-                    Directory.CreateDirectory(Path.GetDirectoryName(_tokenPath));
-                    File.WriteAllText(_tokenPath, JsonConvert.SerializeObject(_tokens));
-                    return;
+                    if(response.StatusCode == HttpStatusCode.NoContent)
+                        return;
+                    await RefreshAccessToken();
+                    client.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", _tokens.AccessToken);
+                    response = await client.GetAsync("https://api.spotify.com/v1/me/player/currently-playing");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return;
+                    }
                 }
 
                 var content = await response.Content.ReadAsStringAsync();
@@ -433,6 +440,7 @@ namespace CurrentlyListening.Windows
 
                         OutputBox.Text = output;
                         File.WriteAllText(_outputFilePath, output);
+                        return;
                     }
 
                     string artist = json.Item.Artists[0].Name ?? Translations.UNKNOWN_ARTIST;
@@ -473,7 +481,6 @@ namespace CurrentlyListening.Windows
                     File.WriteAllText(_outputFilePath, output);
                     _lastArtist = artist;
                     _lastTitle = title;
-                    SaveTokens();
                 }
             }
             catch (Exception ex)
