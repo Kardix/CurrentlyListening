@@ -60,6 +60,24 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CurrentlyListening se nepodařilo spustit:.
+        /// </summary>
+        internal static string APP_FAILED_TO_START {
+            get {
+                return ResourceManager.GetString("APP_FAILED_TO_START", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Podrobnosti byly uloženy do:.
+        /// </summary>
+        internal static string APP_FAILED_TO_START_LOCATION {
+            get {
+                return ResourceManager.GetString("APP_FAILED_TO_START_LOCATION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interpret.
         /// </summary>
         internal static string ARTIST {

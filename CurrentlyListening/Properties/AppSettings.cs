@@ -103,6 +103,23 @@ public static class AppSettings
         }
     }
 
+    // Returns a valid CultureInfo for the configured language, falling back to
+    // English if the stored code is null, empty, or not a recognized culture.
+    // Prevents CultureNotFoundException from crashing startup on user machines.
+    public static CultureInfo GetCulture()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(_langCode))
+                return CultureInfo.GetCultureInfo("en");
+            return CultureInfo.GetCultureInfo(_langCode);
+        }
+        catch (CultureNotFoundException)
+        {
+            return CultureInfo.GetCultureInfo("en");
+        }
+    }
+
     // Property to get and set the app language
     public static string LangCode
     {

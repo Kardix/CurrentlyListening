@@ -122,4 +122,10 @@
   <data name="SETTINGS_GENERAL" xml:space="preserve">
     <value>Obecná nastavení</value>
   </data>
+  <data name="APP_FAILED_TO_START" xml:space="preserve">
+    <value>CurrentlyListening se nepodařilo spustit:</value>
+  </data>
+  <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
+    <value>Podrobnosti byly uloženy do:</value>
+  </data>
 </root>

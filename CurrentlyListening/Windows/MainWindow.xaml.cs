@@ -60,8 +60,9 @@ namespace CurrentlyListening.Windows
             AppSettings.LoadSettings();
 
             InitializeComponent();
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(AppSettings.LangCode);
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(AppSettings.LangCode);
+            var culture = AppSettings.GetCulture();
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
             ArtistCheckbox.IsChecked = AppSettings.ShowArtist;
             TitleCheckbox.IsChecked = AppSettings.ShowTitle;
             DurationCheckbox.IsChecked = AppSettings.ShowDuration;
@@ -437,6 +438,13 @@ namespace CurrentlyListening.Windows
                     if (!_isPlaying)
                     {
                         output = Translations.NOTHING_PLAYING;
+                        if (AppSettings.TrailingSpacesCount != 0)
+                        {
+                            for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
+                            {
+                                output += " ";
+                            }
+                        }
 
                         OutputBox.Text = output;
                         File.WriteAllText(_outputFilePath, output);

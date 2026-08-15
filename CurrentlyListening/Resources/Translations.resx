@@ -151,4 +151,10 @@
   <data name="SETTINGS_GENERAL" xml:space="preserve">
     <value>General Settings</value>
   </data>
+  <data name="APP_FAILED_TO_START" xml:space="preserve">
+    <value>CurrentlyListening failed to start:</value>
+  </data>
+  <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
+    <value>Details were written to:</value>
+  </data>
 </root>

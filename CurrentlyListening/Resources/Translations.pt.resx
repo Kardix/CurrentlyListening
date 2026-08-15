@@ -122,4 +122,10 @@
   <data name="SETTINGS_GENERAL" xml:space="preserve">
     <value>Definições gerais</value>
   </data>
+  <data name="APP_FAILED_TO_START" xml:space="preserve">
+    <value>Não foi possível iniciar o CurrentlyListening:</value>
+  </data>
+  <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
+    <value>Os detalhes foram guardados em:</value>
+  </data>
 </root>

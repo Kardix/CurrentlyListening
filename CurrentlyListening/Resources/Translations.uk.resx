@@ -123,4 +123,10 @@
   <data name="SETTINGS_GENERAL" xml:space="preserve">
     <value>Загальні налаштування</value>
   </data>
+  <data name="APP_FAILED_TO_START" xml:space="preserve">
+    <value>Не вдалося запустити CurrentlyListening:</value>
+  </data>
+  <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
+    <value>Деталі було збережено у:</value>
+  </data>
 </root>
