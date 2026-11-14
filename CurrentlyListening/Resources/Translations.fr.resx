@@ -10,7 +10,7 @@
     <data name="NOTHING_PLAYING" xml:space="preserve"><value>Rien n'est en cours de lecture.</value></data>
     <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Artiste inconnu</value></data>
     <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Titre inconnu</value></data>
-    <data name="FILE_SAVED" xml:space="preserve"><value>Chemin du fichier enregistré:\n{dialog.FileName}</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Chemin du fichier enregistré:&#10;{0}</value></data>
     <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Enregistré</value></data>
     <data name="AUTH_SUCCESS" xml:space="preserve"><value>Autorisation réussie. Vous pouvez fermer cette fenêtre.</value></data>
     <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Connexion réussie.</value></data>
@@ -127,5 +127,20 @@
   </data>
   <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
     <value>Les détails ont été enregistrés dans :</value>
+  </data>
+  <data name="OUTPUT_FILE_MOVED" xml:space="preserve">
+    <value>L'emplacement du fichier de sortie n'est pas accessible en écriture. Les informations du morceau sont désormais enregistrées dans :&#10;{0}</value>
+  </data>
+  <data name="OUTPUT_FILE_NOT_WRITABLE" xml:space="preserve">
+    <value>Impossible d'écrire à cet emplacement :&#10;{0}&#10;&#10;Veuillez choisir un autre dossier.</value>
+  </data>
+  <data name="LOGIN_PORT_IN_USE" xml:space="preserve">
+    <value>Impossible de démarrer la connexion à Spotify : le port 5000 est déjà utilisé par un autre programme.&#10;&#10;Fermez ce programme (souvent un serveur de développement local) puis réessayez.</value>
+  </data>
+  <data name="LOGIN_CANCELLED" xml:space="preserve">
+    <value>Connexion annulée. Vous pouvez fermer cette fenêtre.</value>
+  </data>
+  <data name="LOGIN_ERROR" xml:space="preserve">
+    <value>Échec de la connexion à Spotify :&#10;{0}</value>
   </data>
 </root>

@@ -44,8 +44,11 @@ namespace CurrentlyListening.Windows
         private bool _isPlaying = true;
         private string _lastArtist;
         private string _lastTitle;
-        private string _outputFilePath = "trackinfo.txt";
         private DateTime _songStartTime;
+        private bool _loginPopupShown; // the "log in?" popup is shown once until the next successful login
+        private HttpListener _loginListener; // the login callback listener while a login is in progress
+        private static readonly TimeSpan LoginTimeout = TimeSpan.FromMinutes(5);
+        private Task _refreshTask; // the token refresh in progress, shared by everyone who needs one
         private DispatcherTimer _spotifyPollTimer = new();
 
 
@@ -55,10 +58,9 @@ namespace CurrentlyListening.Windows
         private ContextMenuStrip _trayMenu;
         private ToolStripMenuItem exitItem;
 
+        // Settings are already loaded by App.OnStartup before this window is created.
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
-            AppSettings.LoadSettings();
-
             InitializeComponent();
             var culture = AppSettings.GetCulture();
             Thread.CurrentThread.CurrentCulture = culture;
@@ -81,7 +83,13 @@ namespace CurrentlyListening.Windows
             m_notifyIcon = new NotifyIcon();
             InitializeTray();
             NameLabels();
-            _outputFilePath = AppSettings.OutputFilePath;
+
+            if (AppSettings.EnsureOutputFileIsWritable())
+            {
+                MessageBox.Show(string.Format(Translations.OUTPUT_FILE_MOVED, AppSettings.OutputFilePath),
+                    Translations.APP_NAME, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             _httpClientFactory = httpClientFactory;
             _ = LoadTokens();
 
@@ -95,7 +103,8 @@ namespace CurrentlyListening.Windows
 
             Closing += MainWindow_Closing;
 
-            CheckForUpdatesAsync();
+            if (AppSettings.CheckForUpdates)
+                _ = CheckForUpdatesAsync();
         }
 
         private void InitializeTray()
@@ -191,46 +200,47 @@ namespace CurrentlyListening.Windows
             {
                 Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
                 Title = Translations.SELECT_OUTPUT,
-                FileName = "trackinfo.txt"
+                // Open where the file is now, so users can see where track info is written.
+                InitialDirectory = Path.GetDirectoryName(AppSettings.OutputFilePath),
+                FileName = Path.GetFileName(AppSettings.OutputFilePath)
             };
 
             if (dialog.ShowDialog() == true)
             {
-                AppSettings.OutputFilePath = dialog.FileName;
-                AppSettings.SaveSettings(); // persist to disk
+                if (!AppSettings.CanWriteOutputFile(dialog.FileName))
+                {
+                    MessageBox.Show(string.Format(Translations.OUTPUT_FILE_NOT_WRITABLE, dialog.FileName),
+                        Translations.APP_NAME, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-                MessageBox.Show(Translations.FILE_SAVED, Translations.FILE_SAVED_CAPTION, MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                AppSettings.OutputFilePath = dialog.FileName; // the setter saves
+
+                MessageBox.Show(string.Format(Translations.FILE_SAVED, dialog.FileName), Translations.FILE_SAVED_CAPTION,
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
-        private void UpdateDisplay_Click(object sender, RoutedEventArgs e)
+        // Fetches the current track right away instead of waiting for the next 5-second poll.
+        private async void UpdateDisplay_Click(object sender, RoutedEventArgs e)
         {
-            // Simulated data for now
-            string artist = "";
-            string title = "";
-            int progressMs = 0;
-            int durationMs = 1;
+            await UpdateTrackInfo();
+        }
 
-            string output = "";
-
-            if (ArtistCheckbox.IsChecked == true)
-                output += artist;
-
-            if (TitleCheckbox.IsChecked == true)
+        // Shows the text in the preview and writes it to the output file. A failed write
+        // (file locked, folder gone) is shown in the preview instead of being thrown on
+        // every timer tick and filling the crash log.
+        private void WriteOutput(string text)
+        {
+            OutputBox.Text = text;
+            try
             {
-                if (!string.IsNullOrEmpty(output)) output += " - ";
-                output += title;
+                File.WriteAllText(AppSettings.OutputFilePath, text);
             }
-
-            if (DurationCheckbox.IsChecked == true)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                if (!string.IsNullOrEmpty(output)) output += " ";
-                output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
+                OutputBox.Text = $"Error: {ex.Message}";
             }
-
-            OutputBox.Text = output;
-            File.WriteAllText(_outputFilePath, output);
         }
 
         private string FormatTime(int ms) =>
@@ -250,27 +260,118 @@ namespace CurrentlyListening.Windows
             string authUrl =
                 $"https://accounts.spotify.com/authorize?client_id={_clientId}&response_type=code&redirect_uri={HttpUtility.UrlEncode(RedirectUri)}&scope={HttpUtility.UrlEncode(scope)}&state={state}";
 
-            using var listener = new HttpListener();
+            // An earlier attempt may still be waiting (e.g. its browser tab was closed);
+            // stop it so this one can take the port.
+            StopLoginListener();
+
+            var listener = new HttpListener();
             listener.Prefixes.Add("http://127.0.0.1:5000/callback/");
-            listener.Start();
+            try
+            {
+                listener.Start();
+            }
+            catch (HttpListenerException)
+            {
+                listener.Close();
+                MessageBox.Show(Translations.LOGIN_PORT_IN_USE, Translations.APP_NAME, MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
 
-            Process.Start(new ProcessStartInfo(authUrl) { UseShellExecute = true });
+            _loginListener = listener;
+            try
+            {
+                Process.Start(new ProcessStartInfo(authUrl) { UseShellExecute = true });
+            }
+            catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
+            {
+                // No default browser (or it failed to start): free the port and say why.
+                StopLoginListener();
+                MessageBox.Show(string.Format(Translations.LOGIN_ERROR, ex.Message), Translations.APP_NAME,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            var context = await listener.GetContextAsync();
-            string code = HttpUtility.ParseQueryString(context.Request.Url.Query).Get("code");
+            HttpListenerContext context;
+            // Give up if the browser never comes back (tab closed), so the port is freed.
+            using (var timeout = new CancellationTokenSource(LoginTimeout))
+            using (timeout.Token.Register(() => listener.Close()))
+            {
+                try
+                {
+                    context = await listener.GetContextAsync();
+                }
+                catch (Exception ex) when (ex is HttpListenerException or ObjectDisposedException)
+                {
+                    // Timed out, or replaced by a newer login attempt.
+                    if (_loginListener == listener)
+                        StopLoginListener();
+                    return;
+                }
+            }
 
-            var responseString = $"<html><body>{Translations.AUTH_SUCCESS}</body></html>";
-            var buffer = Encoding.UTF8.GetBytes(responseString);
-            context.Response.ContentLength64 = buffer.Length;
-            await context.Response.OutputStream.WriteAsync(buffer);
-            context.Response.OutputStream.Close();
+            string error = null;
+            try
+            {
+                var query = HttpUtility.ParseQueryString(context.Request.Url.Query);
+                var code = query.Get("code"); // missing when the user pressed Cancel (error=access_denied)
 
-            listener.Stop();
+                string page;
+                if (string.IsNullOrEmpty(code))
+                {
+                    page = Translations.LOGIN_CANCELLED;
+                }
+                else
+                {
+                    // Exchange before answering the browser, so the page shows the real result.
+                    try
+                    {
+                        error = await ExchangeCodeForTokens(code);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Network failure or timeout, an unreadable reply, or tokens.json not writable.
+                        error = ex.Message;
+                    }
+                    page = error == null ? Translations.AUTH_SUCCESS : string.Format(Translations.LOGIN_ERROR, error);
+                }
 
-            await ExchangeCodeForTokens(code);
+                try
+                {
+                    var buffer = Encoding.UTF8.GetBytes(
+                        $"<html><body>{WebUtility.HtmlEncode(page).Replace("\n", "<br>")}</body></html>");
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                    context.Response.ContentLength64 = buffer.Length;
+                    await context.Response.OutputStream.WriteAsync(buffer);
+                    context.Response.OutputStream.Close();
+                }
+                catch (Exception ex) when (ex is HttpListenerException or IOException)
+                {
+                    // The browser went away before the page was sent; the login result still stands.
+                }
+            }
+            finally
+            {
+                if (_loginListener == listener)
+                    StopLoginListener();
+            }
+
+            if (error != null)
+            {
+                MessageBox.Show(string.Format(Translations.LOGIN_ERROR, error), Translations.APP_NAME,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private async Task ExchangeCodeForTokens(string code)
+        private void StopLoginListener()
+        {
+            _loginListener?.Close();
+            _loginListener = null;
+        }
+
+        // Returns null on success, otherwise a message describing why Spotify refused the login.
+        // Network and file errors are thrown; LoginButton_Click reports them the same way.
+        private async Task<string> ExchangeCodeForTokens(string code)
         {
             using var client = _httpClientFactory.CreateClient();
             var postData = new[]
@@ -285,6 +386,22 @@ namespace CurrentlyListening.Windows
             var content = new FormUrlEncodedContent(postData);
             var response = await client.PostAsync("https://accounts.spotify.com/api/token", content);
             var body = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // e.g. {"error":"invalid_client","error_description":"Invalid client secret"}
+                try
+                {
+                    var errorJson = JObject.Parse(body);
+                    return errorJson["error_description"]?.ToString() ?? errorJson["error"]?.ToString()
+                        ?? response.StatusCode.ToString();
+                }
+                catch (JsonException)
+                {
+                    return response.StatusCode.ToString();
+                }
+            }
+
             var json = JObject.Parse(body);
 
             _tokens = new SpotifyToken
@@ -295,10 +412,22 @@ namespace CurrentlyListening.Windows
             };
 
             SaveTokens();
+            _loginPopupShown = false;
             OutputBox.Text = Translations.LOGIN_SUCCESS;
+            return null;
         }
 
-        private async Task RefreshAccessToken()
+        // Startup, the poll tick, the end-of-song check and "Update display" can all need a
+        // refresh at once. They share the one in progress: a second refresh with the same
+        // refresh token can be rejected once Spotify has rotated it, which would log the user out.
+        private Task RefreshAccessToken()
+        {
+            if (_refreshTask == null || _refreshTask.IsCompleted)
+                _refreshTask = RefreshAccessTokenCore();
+            return _refreshTask;
+        }
+
+        private async Task RefreshAccessTokenCore()
         {
             if (_tokens == null || string.IsNullOrEmpty(_tokens.RefreshToken)) return;
 
@@ -313,11 +442,28 @@ namespace CurrentlyListening.Windows
 
             var content = new FormUrlEncodedContent(postData);
             var response = await client.PostAsync("https://accounts.spotify.com/api/token", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // 400 means the refresh token was revoked or the credentials are wrong, so the user
+                // has to log in again. Anything else (outage, rate limit) is transient: keep the
+                // tokens and let the next poll retry.
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    _tokens.AccessToken = null;
+                return;
+            }
+
             var body = await response.Content.ReadAsStringAsync();
             var json = JObject.Parse(body);
 
             _tokens.AccessToken = json["access_token"]?.ToString();
             _tokens.ExpiryTime = DateTime.UtcNow.AddSeconds((int)json["expires_in"]);
+
+            // Spotify may rotate the refresh token; the old one stops working once it does.
+            var newRefreshToken = json["refresh_token"]?.ToString();
+            if (!string.IsNullOrEmpty(newRefreshToken))
+                _tokens.RefreshToken = newRefreshToken;
+
             SaveTokens();
         }
 
@@ -336,23 +482,25 @@ namespace CurrentlyListening.Windows
             try
             {
                 _tokens = JsonConvert.DeserializeObject<SpotifyToken>(await File.ReadAllTextAsync(_tokenPath));
-                if (!string.IsNullOrEmpty(_tokens.ClientId) && !string.IsNullOrEmpty(_tokens.ClientSecret))
-                {
-                    _clientId = _tokens.ClientId;
-                    _clientSecret = _tokens.ClientSecret;
-                }
-
-                if (_tokens.ExpiryTime <= DateTime.UtcNow)
-                {
-                    _ = RefreshAccessToken(); // fire-and-forget auto-refresh
-                }
-
-                await UpdateTrackInfo();
             }
             catch
             {
+                // Only an unreadable token file means "logged out".
                 _tokens = null;
+                return;
             }
+
+            if (_tokens == null) return;
+
+            if (!string.IsNullOrEmpty(_tokens.ClientId) && !string.IsNullOrEmpty(_tokens.ClientSecret))
+            {
+                _clientId = _tokens.ClientId;
+                _clientSecret = _tokens.ClientSecret;
+            }
+
+            // UpdateTrackInfo refreshes an expired token itself and keeps the tokens on
+            // network failures, so a slow network at startup no longer forces a re-login.
+            await UpdateTrackInfo();
         }
 
         private async Task UpdateTrackInfo()
@@ -360,13 +508,15 @@ namespace CurrentlyListening.Windows
             if (_tokens == null || string.IsNullOrEmpty(_tokens.AccessToken))
             {
                 output = Translations.LOGIN_FAILED;
-                OutputBox.Text = output;
-                File.WriteAllText(_outputFilePath, output);
-                if (AppSettings.ShowPopupOnFail)
+                WriteOutput(output);
+                // MessageBox.Show keeps pumping messages, so the poll timer keeps ticking while it's
+                // open; set the flag first so later ticks don't stack more popups on top of it.
+                if (AppSettings.ShowPopupOnFail && !_loginPopupShown)
                 {
+                    _loginPopupShown = true;
                     var result = MessageBox.Show(
                         $"{Translations.LOGIN_POPUP_TEXT}",
-                        Translations.UPDATE_AVAILABLE,
+                        Translations.LOGIN_SPOTIFY,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Information);
                     if (result == MessageBoxResult.Yes)
@@ -376,21 +526,22 @@ namespace CurrentlyListening.Windows
                 return;
             }
 
-            // Refresh token if expired
-            if (_tokens.ExpiryTime <= DateTime.UtcNow)
-            {
-                await RefreshAccessToken();
-                if (_tokens == null || string.IsNullOrEmpty(_tokens.AccessToken))
-                {
-                    OutputBox.Text = output;
-                    File.WriteAllText(_outputFilePath, output);
-                    return;
-                }
-            }
-
-            output = "";
             try
             {
+                // Refresh token if expired. Inside the try so a network failure is shown
+                // and retried on the next poll instead of escaping the timer tick.
+                if (_tokens.ExpiryTime <= DateTime.UtcNow)
+                {
+                    await RefreshAccessToken();
+                    if (_tokens == null || string.IsNullOrEmpty(_tokens.AccessToken) ||
+                        _tokens.ExpiryTime <= DateTime.UtcNow)
+                    {
+                        WriteOutput(output);
+                        return;
+                    }
+                }
+
+                output = "";
                 using var client = _httpClientFactory.CreateClient();
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", _tokens.AccessToken);
@@ -424,8 +575,7 @@ namespace CurrentlyListening.Windows
                     }
 
                     _isPlaying = false;
-                    OutputBox.Text = output;
-                    File.WriteAllText(_outputFilePath, output);
+                    WriteOutput(output);
                 }
                 else
                 {
@@ -446,8 +596,7 @@ namespace CurrentlyListening.Windows
                             }
                         }
 
-                        OutputBox.Text = output;
-                        File.WriteAllText(_outputFilePath, output);
+                        WriteOutput(output);
                         return;
                     }
 
@@ -485,8 +634,7 @@ namespace CurrentlyListening.Windows
                         }
                     }
 
-                    OutputBox.Text = output;
-                    File.WriteAllText(_outputFilePath, output);
+                    WriteOutput(output);
                     _lastArtist = artist;
                     _lastTitle = title;
                 }
@@ -510,15 +658,13 @@ namespace CurrentlyListening.Windows
                     }
                 }
 
-                OutputBox.Text = output;
-                File.WriteAllText(_outputFilePath, output);
+                WriteOutput(output);
                 return;
             }
 
             if (string.IsNullOrEmpty(_currentTrackId))
             {
-                OutputBox.Text = output;
-                File.WriteAllText(_outputFilePath, output);
+                WriteOutput(output);
                 return;
             }
 
@@ -564,8 +710,7 @@ namespace CurrentlyListening.Windows
                 }
             }
 
-            OutputBox.Text = output;
-            File.WriteAllText(_outputFilePath, output);
+            WriteOutput(output);
         }
 
         private void ShowAboutWindow_Click(object sender, RoutedEventArgs e)

@@ -10,7 +10,7 @@
     <data name="NOTHING_PLAYING" xml:space="preserve"><value>Nada está tocando no momento.</value></data>
     <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Artista desconhecido</value></data>
     <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Título desconhecido</value></data>
-    <data name="FILE_SAVED" xml:space="preserve"><value>Caminho do arquivo salvo:\n{dialog.FileName}</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Caminho do arquivo salvo:&#10;{0}</value></data>
     <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Salvo</value></data>
     <data name="AUTH_SUCCESS" xml:space="preserve"><value>Autorização bem-sucedida. Você pode fechar esta janela.</value></data>
     <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Login realizado com sucesso.</value></data>
@@ -127,5 +127,20 @@
   </data>
   <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
     <value>Os detalhes foram guardados em:</value>
+  </data>
+  <data name="OUTPUT_FILE_MOVED" xml:space="preserve">
+    <value>Não é possível gravar no local do arquivo de saída, então as informações da faixa agora são salvas em:&#10;{0}</value>
+  </data>
+  <data name="OUTPUT_FILE_NOT_WRITABLE" xml:space="preserve">
+    <value>Não é possível gravar neste local:&#10;{0}&#10;&#10;Escolha outra pasta.</value>
+  </data>
+  <data name="LOGIN_PORT_IN_USE" xml:space="preserve">
+    <value>Não é possível iniciar o login no Spotify: a porta 5000 já está sendo usada por outro programa.&#10;&#10;Feche esse programa (geralmente um servidor de desenvolvimento local) e tente novamente.</value>
+  </data>
+  <data name="LOGIN_CANCELLED" xml:space="preserve">
+    <value>Login cancelado. Você pode fechar esta janela.</value>
+  </data>
+  <data name="LOGIN_ERROR" xml:space="preserve">
+    <value>Falha no login do Spotify:&#10;{0}</value>
   </data>
 </root>

@@ -177,7 +177,8 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File path saved:\n{dialog.FileName}.
+        ///   Looks up a localized string similar to File path saved:
+        ///{0}.
         /// </summary>
         internal static string FILE_SAVED {
             get {
@@ -294,6 +295,25 @@ namespace CurrentlyListening.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login was cancelled. You can close this window..
+        /// </summary>
+        internal static string LOGIN_CANCELLED {
+            get {
+                return ResourceManager.GetString("LOGIN_CANCELLED", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Spotify login failed:
+        ///{0}.
+        /// </summary>
+        internal static string LOGIN_ERROR {
+            get {
+                return ResourceManager.GetString("LOGIN_ERROR", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Something went wrong with login data, please re-authorize.
         /// </summary>
         internal static string LOGIN_FAILED {
@@ -310,7 +330,18 @@ namespace CurrentlyListening.Resources {
                 return ResourceManager.GetString("LOGIN_POPUP_TEXT", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t start the Spotify login: port 5000 is already in use by another program.
+        ///
+        ///Close that program (often a local development server) and try again..
+        /// </summary>
+        internal static string LOGIN_PORT_IN_USE {
+            get {
+                return ResourceManager.GetString("LOGIN_PORT_IN_USE", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Login to Spotify.
         /// </summary>
@@ -355,7 +386,29 @@ namespace CurrentlyListening.Resources {
                 return ResourceManager.GetString("NOTHING_PLAYING", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to The output file location can&apos;t be written to, so track info is now saved to:
+        ///{0}.
+        /// </summary>
+        internal static string OUTPUT_FILE_MOVED {
+            get {
+                return ResourceManager.GetString("OUTPUT_FILE_MOVED", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t write to this location:
+        ///{0}
+        ///
+        ///Please choose a different folder..
+        /// </summary>
+        internal static string OUTPUT_FILE_NOT_WRITABLE {
+            get {
+                return ResourceManager.GetString("OUTPUT_FILE_NOT_WRITABLE", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Output preview:.
         /// </summary>

@@ -10,7 +10,7 @@
     <data name="NOTHING_PLAYING" xml:space="preserve"><value>Momentálně nic nehraje.</value></data>
     <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Neznámý interpret</value></data>
     <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Neznámý název</value></data>
-    <data name="FILE_SAVED" xml:space="preserve"><value>Cesta k souboru byla uložena:\n{dialog.FileName}</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Cesta k souboru byla uložena:&#10;{0}</value></data>
     <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Uloženo</value></data>
     <data name="AUTH_SUCCESS" xml:space="preserve"><value>Autorizace byla úspěšná. Můžete zavřít toto okno.</value></data>
     <data name="LOGIN_SUCCESS" xml:space="preserve"><value>Přihlášení bylo úspěšné.</value></data>
@@ -127,5 +127,20 @@
   </data>
   <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
     <value>Podrobnosti byly uloženy do:</value>
+  </data>
+  <data name="OUTPUT_FILE_MOVED" xml:space="preserve">
+    <value>Do umístění výstupního souboru nelze zapisovat, informace o skladbě se proto nyní ukládají do:&#10;{0}</value>
+  </data>
+  <data name="OUTPUT_FILE_NOT_WRITABLE" xml:space="preserve">
+    <value>Do tohoto umístění nelze zapisovat:&#10;{0}&#10;&#10;Vyberte prosím jinou složku.</value>
+  </data>
+  <data name="LOGIN_PORT_IN_USE" xml:space="preserve">
+    <value>Přihlášení ke Spotify nelze spustit: port 5000 už používá jiný program.&#10;&#10;Zavřete tento program (často místní vývojový server) a zkuste to znovu.</value>
+  </data>
+  <data name="LOGIN_CANCELLED" xml:space="preserve">
+    <value>Přihlášení bylo zrušeno. Toto okno můžete zavřít.</value>
+  </data>
+  <data name="LOGIN_ERROR" xml:space="preserve">
+    <value>Přihlášení ke Spotify se nezdařilo:&#10;{0}</value>
   </data>
 </root>

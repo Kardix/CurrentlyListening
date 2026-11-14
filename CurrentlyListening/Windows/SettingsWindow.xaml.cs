@@ -10,9 +10,8 @@ namespace CurrentlyListening.Windows
         public SettingsWindow()
         {
             InitializeComponent();
-            
+
             // Load current setting into UI
-            AppSettings.LoadSettings();
             NameLabels();
             CloseShouldMinimize.IsChecked = AppSettings.CloseToTray;
             StartMinimized.IsChecked = AppSettings.StartMinimized;

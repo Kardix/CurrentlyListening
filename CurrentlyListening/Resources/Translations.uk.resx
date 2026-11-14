@@ -10,7 +10,7 @@
     <data name="NOTHING_PLAYING" xml:space="preserve"><value>Зараз нічого не відтворюється.</value></data>
     <data name="UNKNOWN_ARTIST" xml:space="preserve"><value>Невідомий виконавець</value></data>
     <data name="UNKNOWN_TITLE" xml:space="preserve"><value>Невідома назва</value></data>
-    <data name="FILE_SAVED" xml:space="preserve"><value>Шлях до файлу збережено:</value></data>
+    <data name="FILE_SAVED" xml:space="preserve"><value>Шлях до файлу збережено:&#10;{0}</value></data>
     <data name="FILE_SAVED_CAPTION" xml:space="preserve"><value>Збережено</value></data>
     <data name="AUTH_SUCCESS" xml:space="preserve"><value>Авторизація успішна. Ви можете закрити це 
         вікно.</value></data>
@@ -128,5 +128,20 @@
   </data>
   <data name="APP_FAILED_TO_START_LOCATION" xml:space="preserve">
     <value>Деталі було збережено у:</value>
+  </data>
+  <data name="OUTPUT_FILE_MOVED" xml:space="preserve">
+    <value>Неможливо записати файл у вибране розташування, тому інформацію про трек тепер збережено у:&#10;{0}</value>
+  </data>
+  <data name="OUTPUT_FILE_NOT_WRITABLE" xml:space="preserve">
+    <value>Неможливо записати в це розташування:&#10;{0}&#10;&#10;Будь ласка, оберіть іншу папку.</value>
+  </data>
+  <data name="LOGIN_PORT_IN_USE" xml:space="preserve">
+    <value>Не вдається розпочати вхід у Spotify: порт 5000 уже використовується іншою програмою.&#10;&#10;Закрийте цю програму (часто це локальний сервер розробки) і спробуйте ще раз.</value>
+  </data>
+  <data name="LOGIN_CANCELLED" xml:space="preserve">
+    <value>Вхід скасовано. Можете закрити це вікно.</value>
+  </data>
+  <data name="LOGIN_ERROR" xml:space="preserve">
+    <value>Не вдалося увійти в Spotify:&#10;{0}</value>
   </data>
 </root>

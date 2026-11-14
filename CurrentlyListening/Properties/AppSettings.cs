@@ -2,13 +2,17 @@ using System.Globalization;
 using System.IO;
 using CurrentlyListening.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CurrentlyListening.Properties;
 
 public static class AppSettings
 {
+    public static readonly string DefaultOutputFilePath = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "CurrentlyListening", "trackinfo.txt");
+
     private static string _langCode = "en"; // default value
-    private static string _outputFilePath = "trackinfo.txt"; // Default value
+    private static string _outputFilePath = DefaultOutputFilePath;
     private static bool _showArtist = true;
     private static bool _showTitle = true;
     private static bool _showDuration = true;
@@ -98,8 +102,45 @@ public static class AppSettings
             if (_startMinimized != value)
             {
                 _startMinimized = value;
-                SaveSettings(); // Optionally save settings here if you want to persist them.
+                SaveSettings();
             }
+        }
+    }
+    
+    public static bool EnsureOutputFileIsWritable()
+    {
+        var path = Path.IsPathFullyQualified(_outputFilePath)
+            ? _outputFilePath
+            : Path.Combine(AppContext.BaseDirectory, _outputFilePath);
+
+        var fellBack = false;
+        if (!CanWriteOutputFile(path))
+        {
+            path = DefaultOutputFilePath;
+            CanWriteOutputFile(path);
+            fellBack = true;
+        }
+
+        if (path != _outputFilePath)
+        {
+            _outputFilePath = path;
+            TrySaveSettings();
+        }
+
+        return fellBack;
+    }
+
+    public static bool CanWriteOutputFile(string path)
+    {
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            using (new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)) { }
+            return true;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        {
+            return false;
         }
     }
 
@@ -173,36 +214,108 @@ public static class AppSettings
         }
     }
 
-    // Method to save settings (you can use JSON or XML serialization for persistence)
+    private static readonly string SettingsDirectory = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SpotifyRetranslator");
+
+    private static readonly string SettingsPath = Path.Combine(SettingsDirectory, "settings.json");
+
+    // The previous good settings.json, kept by every save so a broken file can be restored.
+    private static readonly string BackupSettingsPath = SettingsPath + ".bak";
+
     public static void SaveSettings()
     {
-        // For example, save settings to a file or use System.IO to save it locally.
-        // Here you can use a simple file-based persistence or JSON as an alternative.
-        string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "SpotifyRetranslator", "settings.json");
         var settings = new{ OutputFilePath = _outputFilePath, Language = _langCode, Artist = _showArtist, Song = _showTitle,
-            Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized, CheckForUpdates = _checkForUpdates, TrailingSpacesCount = _trailingSpacesCount };
-        File.WriteAllText(settingsPath, JsonConvert.SerializeObject(settings));
+            Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized, CheckForUpdates = _checkForUpdates, TrailingSpacesCount = _trailingSpacesCount,
+            ShowPopupOnFail = _showPopupOnFail };
+
+        Directory.CreateDirectory(SettingsDirectory);
+
+        // Write to a temp file and swap it in, so a crash mid-write can't leave a
+        // truncated settings.json behind.
+        var tempPath = SettingsPath + ".tmp";
+        File.WriteAllText(tempPath, JsonConvert.SerializeObject(settings));
+        if (File.Exists(SettingsPath))
+            File.Replace(tempPath, SettingsPath, BackupSettingsPath);
+        else
+            File.Move(tempPath, SettingsPath);
     }
 
-    // Method to load settings (read from a file)
     public static void LoadSettings()
     {
-        string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "SpotifyRetranslator", "settings.json");
-        if (File.Exists(settingsPath))
+        if (TryApplySettingsFile(SettingsPath))
+            return;
+
+        // settings.json is missing or broken: restore the copy kept by the previous save.
+        if (TryApplySettingsFile(BackupSettingsPath))
         {
-            var settingsJson = File.ReadAllText(settingsPath);
-            var settings = JsonConvert.DeserializeObject<dynamic>(settingsJson);
-            _outputFilePath = settings?.OutputFilePath ?? "trackinfo.txt"; // Default fallback
-            _showArtist = settings?.Artist ?? true;
-            _showTitle = settings?.Song ?? true;
-            _showDuration = settings?.Duration ?? true;
-            _langCode = settings?.Language ?? "en";
-            _closeToTray =  settings?.CloseToTray ?? true;
-            _startMinimized = settings?.StartMinimized ?? false;
-            _checkForUpdates = settings?.CheckForUpdates ?? true;
-            _trailingSpacesCount = settings?.TrailingSpacesCount ?? 0;
+            // Copy rather than save, so the good backup isn't replaced by the broken file.
+            try
+            {
+                File.Copy(BackupSettingsPath, SettingsPath, true);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+            }
+            return;
+        }
+
+        // Broken with no usable backup: keep the current values (the defaults at startup)
+        // and write a fresh file over the broken one.
+        if (File.Exists(SettingsPath))
+            TrySaveSettings();
+    }
+
+    // For saves made while starting up: a locked settings.json (antivirus, indexer) must not
+    // stop the app from starting. The values still apply for this session, and the next
+    // successful save writes them out.
+    private static void TrySaveSettings()
+    {
+        try
+        {
+            SaveSettings();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+        }
+    }
+
+    // Reads every value before assigning any, so a bad file can't leave the settings half-loaded.
+    private static bool TryApplySettingsFile(string path)
+    {
+        if (!File.Exists(path))
+            return false;
+
+        try
+        {
+            var settings = JObject.Parse(File.ReadAllText(path));
+
+            var outputFilePath = settings.Value<string>("OutputFilePath");
+            var showArtist = settings.Value<bool?>("Artist") ?? true;
+            var showTitle = settings.Value<bool?>("Song") ?? true;
+            var showDuration = settings.Value<bool?>("Duration") ?? true;
+            var langCode = settings.Value<string>("Language") ?? "en";
+            var closeToTray = settings.Value<bool?>("CloseToTray") ?? true;
+            var startMinimized = settings.Value<bool?>("StartMinimized") ?? false;
+            var checkForUpdates = settings.Value<bool?>("CheckForUpdates") ?? true;
+            var trailingSpacesCount = Math.Clamp(settings.Value<int?>("TrailingSpacesCount") ?? 0, 0, 50);
+            var showPopupOnFail = settings.Value<bool?>("ShowPopupOnFail") ?? true;
+
+            _outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
+            _showArtist = showArtist;
+            _showTitle = showTitle;
+            _showDuration = showDuration;
+            _langCode = langCode;
+            _closeToTray = closeToTray;
+            _startMinimized = startMinimized;
+            _checkForUpdates = checkForUpdates;
+            _trailingSpacesCount = trailingSpacesCount;
+            _showPopupOnFail = showPopupOnFail;
+            return true;
+        }
+        catch (Exception)
+        {
+            // Unreadable, not JSON, or a value of the wrong type.
+            return false;
         }
     }
 }

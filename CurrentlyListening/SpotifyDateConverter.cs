@@ -3,23 +3,35 @@ using Newtonsoft.Json;
 
 namespace CurrentlyListening;
 
-public class SpotifyDateConverter : JsonConverter<DateTimeOffset>
+// Spotify sends release_date as "yyyy", "yyyy-MM" or "yyyy-MM-dd" (see release_date_precision),
+// and "0000" when the date is unknown. Anything that isn't a real date becomes null instead of
+// failing the whole currently-playing response.
+public class SpotifyDateConverter : JsonConverter<DateTimeOffset?>
 {
-    public override DateTimeOffset ReadJson(JsonReader reader, Type objectType, DateTimeOffset existingValue, bool hasExistingValue, JsonSerializer serializer)
+    private static readonly string[] Formats = { "yyyy-MM-dd", "yyyy-MM", "yyyy" };
+
+    public override DateTimeOffset? ReadJson(JsonReader reader, Type objectType, DateTimeOffset? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
-        var dateString = (string)reader.Value;
-
-        if (dateString.Length == 4) // "yyyy"
-            return new DateTimeOffset(int.Parse(dateString), 1, 1, 0, 0, 0, TimeSpan.Zero);
-
-        if (dateString.Length == 7) // "yyyy-MM"
-            return DateTimeOffset.ParseExact(dateString, "yyyy-MM", CultureInfo.InvariantCulture);
-
-        return DateTimeOffset.Parse(dateString, CultureInfo.InvariantCulture);
+        switch (reader.Value)
+        {
+            // Json.NET may already have parsed an ISO-looking string into a date.
+            case DateTimeOffset dateTimeOffset:
+                return dateTimeOffset;
+            case DateTime dateTime:
+                return new DateTimeOffset(DateTime.SpecifyKind(dateTime, DateTimeKind.Utc));
+            case string dateString when DateTimeOffset.TryParseExact(dateString, Formats,
+                CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var date):
+                return date;
+            default:
+                return null;
+        }
     }
 
-    public override void WriteJson(JsonWriter writer, DateTimeOffset value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, DateTimeOffset? value, JsonSerializer serializer)
     {
-        writer.WriteValue(value.ToString("yyyy-MM-dd")); // Adjust if needed
+        if (value.HasValue)
+            writer.WriteValue(value.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+        else
+            writer.WriteNull();
     }
 }

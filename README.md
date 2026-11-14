@@ -18,7 +18,7 @@
 - Support for multiple languages: English, French, Spanish, German, Czech, Portuguese, Ukrainian, and Polish.
 - Option to use custom Spotify Client ID and Secret for authentication.
 - Output preview to see how your display will look.
-- Ability to set the output file location for integration with streaming software.
+- Ability to set the output file location for integration with streaming software (by default `C:\Users\<your name>\CurrentlyListening\trackinfo.txt`).
 - Lightweight and user-friendly interface.
 - Free to use under a non-commercial, no-derivatives license
 
@@ -28,7 +28,7 @@
 
 - Windows 10 or later.
 - A Spotify account.
-- .NET 8 Desktop Runtime
+- .NET 10 Desktop Runtime
 - Spotify Premium account (required for API access)
 
 ### Installation

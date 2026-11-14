@@ -21,6 +21,8 @@ public partial class App : Application
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         "SpotifyRetranslator", "crash.log");
 
+    private const long MaxCrashLogBytes = 5 * 1024 * 1024;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -93,12 +95,26 @@ public partial class App : Application
                 .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ({source})")
                 .AppendLine(ex?.ToString() ?? "Unknown error")
                 .AppendLine();
+            TrimCrashLog(Encoding.UTF8.GetByteCount(entry.ToString()));
             File.AppendAllText(CrashLogPath, entry.ToString());
         }
         catch
         {
             // Never let the crash logger itself throw.
         }
+    }
+
+    // Keeps crash.log under MaxCrashLogBytes by dropping the oldest half of it,
+    // cut at an entry boundary, so the most recent history survives.
+    private static void TrimCrashLog(int incomingBytes)
+    {
+        var log = new FileInfo(CrashLogPath);
+        if (!log.Exists || log.Length + incomingBytes <= MaxCrashLogBytes)
+            return;
+
+        var text = File.ReadAllText(CrashLogPath);
+        var keepFrom = text.IndexOf("\n[", text.Length / 2, StringComparison.Ordinal);
+        File.WriteAllText(CrashLogPath, keepFrom < 0 ? "" : text.Substring(keepFrom + 1));
     }
 }
 // This software is licensed under CC BY-NC-ND 4.0.
