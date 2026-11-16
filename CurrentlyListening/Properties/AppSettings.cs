@@ -20,6 +20,7 @@ public static class AppSettings
     private static bool _startMinimized = false;
     private static bool _checkForUpdates = true;
     private static bool _showPopupOnFail = true;
+    private static string _closedText = "";
     public static int _trailingSpacesCount { get; set; }
 
 
@@ -175,17 +176,11 @@ public static class AppSettings
         }
     }
 
+    // Not saved here: the Settings window saves when the field loses focus or the window closes.
     public static int TrailingSpacesCount
     {
         get { return _trailingSpacesCount; }
-        set
-        {
-            if (_trailingSpacesCount != value)
-            {
-                _trailingSpacesCount = value;
-                SaveSettings(); // Optionally save settings here if you want to persist them.
-            }
-        }
+        set { _trailingSpacesCount = value; }
     }
     public static bool CheckForUpdates
     {
@@ -214,6 +209,54 @@ public static class AppSettings
         }
     }
 
+    // Not saved here: the Settings window saves when the field loses focus or the window closes.
+    public static string ClosedText
+    {
+        get { return _closedText; }
+        set { _closedText = value; }
+    }
+
+    private static readonly object OutputFileLock = new();
+    private static bool _outputClosed;
+
+    public static string WithTrailingSpaces(string text) =>
+        string.IsNullOrEmpty(text) ? "" : text + new string(' ', _trailingSpacesCount);
+
+    // Every write to the output file goes through here. Throws IOException or
+    // UnauthorizedAccessException like File.WriteAllText. Ignored once the app is closing.
+    public static void WriteOutputFile(string text)
+    {
+        lock (OutputFileLock)
+        {
+            if (!_outputClosed)
+                File.WriteAllText(_outputFilePath, WithTrailingSpaces(text));
+        }
+    }
+
+    // Called on exit and on a fatal crash (any thread). After this, WriteOutputFile does nothing,
+    // so a late timer tick can't put the song back.
+    public static void TryWriteClosedText()
+    {
+        lock (OutputFileLock)
+        {
+            _outputClosed = true;
+            TryWriteFile(_outputFilePath, _closedText);
+        }
+    }
+
+    // For the old output file after the user picks a new one: tell whoever still reads it.
+    public static void TryWriteFile(string path, string text)
+    {
+        try
+        {
+            File.WriteAllText(path, WithTrailingSpaces(text));
+        }
+        catch
+        {
+            // Best effort: never block exit or a settings change on the output file.
+        }
+    }
+
     private static readonly string SettingsDirectory = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SpotifyRetranslator");
 
@@ -226,7 +269,7 @@ public static class AppSettings
     {
         var settings = new{ OutputFilePath = _outputFilePath, Language = _langCode, Artist = _showArtist, Song = _showTitle,
             Duration = _showDuration,  CloseToTray = _closeToTray, StartMinimized = _startMinimized, CheckForUpdates = _checkForUpdates, TrailingSpacesCount = _trailingSpacesCount,
-            ShowPopupOnFail = _showPopupOnFail };
+            ShowPopupOnFail = _showPopupOnFail, ClosedText = _closedText };
 
         Directory.CreateDirectory(SettingsDirectory);
 
@@ -299,6 +342,7 @@ public static class AppSettings
             var checkForUpdates = settings.Value<bool?>("CheckForUpdates") ?? true;
             var trailingSpacesCount = Math.Clamp(settings.Value<int?>("TrailingSpacesCount") ?? 0, 0, 50);
             var showPopupOnFail = settings.Value<bool?>("ShowPopupOnFail") ?? true;
+            var closedText = settings.Value<string>("ClosedText") ?? "";
 
             _outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
             _showArtist = showArtist;
@@ -310,6 +354,7 @@ public static class AppSettings
             _checkForUpdates = checkForUpdates;
             _trailingSpacesCount = trailingSpacesCount;
             _showPopupOnFail = showPopupOnFail;
+            _closedText = closedText;
             return true;
         }
         catch (Exception)

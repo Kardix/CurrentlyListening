@@ -124,6 +124,21 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Amount of trailing spaces in output file</value>
   </data>
+  <data name="CLOSED_TEXT_LABEL" xml:space="preserve">
+    <value>Output file text when app is closed</value>
+  </data>
+  <data name="OUTPUT_FILE_RELINK" xml:space="preserve">
+    <value>Output file moved, please relink</value>
+  </data>
+  <data name="ABOUT_TITLE" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ABOUT_VERSION" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="ABOUT_EMAIL" xml:space="preserve">
+    <value>Email:</value>
+  </data>
   <data name="CHECK_FOR_UPDATES" xml:space="preserve">
     <value>Check for updates on startup</value>
   </data>

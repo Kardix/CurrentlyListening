@@ -64,19 +64,30 @@ public partial class App : Application
         }
     }
 
-    // UI-thread exceptions after startup (e.g. a poll-timer tick). Log, tell the
-    // user, and keep running rather than letting a transient fault kill the app.
+    protected override void OnExit(ExitEventArgs e)
+    {
+        AppSettings.TryWriteClosedText();
+        base.OnExit(e);
+    }
+
+    protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+    {
+        base.OnSessionEnding(e);
+        if (!e.Cancel)
+            AppSettings.TryWriteClosedText();
+    }
+
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         LogException("dispatcher", e.Exception);
         e.Handled = true;
     }
 
-    // Last-resort net for exceptions on any thread. Cannot prevent termination,
-    // but ensures the fault is recorded before the process dies.
     private void OnDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
         LogException("domain", e.ExceptionObject as Exception);
+        if (e.IsTerminating)
+            AppSettings.TryWriteClosedText();
     }
 
     // Faults from fire-and-forget tasks (e.g. LoadTokens / CheckForUpdatesAsync).
@@ -92,7 +103,7 @@ public partial class App : Application
         {
             Directory.CreateDirectory(Path.GetDirectoryName(CrashLogPath));
             var entry = new StringBuilder()
-                .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ({source})")
+                .AppendLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ({source}) v{AppVersion.Display}")
                 .AppendLine(ex?.ToString() ?? "Unknown error")
                 .AppendLine();
             TrimCrashLog(Encoding.UTF8.GetByteCount(entry.ToString()));

@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Windows;
@@ -62,6 +61,7 @@ namespace CurrentlyListening.Windows
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
             InitializeComponent();
+            VersionText.Text = $"v{AppVersion.Display}";
             var culture = AppSettings.GetCulture();
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
@@ -176,7 +176,7 @@ namespace CurrentlyListening.Windows
         {
             m_notifyIcon.BalloonTipText = Translations.MINIMIZE_NOTIFICATION_TEXT;
             m_notifyIcon.BalloonTipTitle = Translations.APP_NAME;
-            m_notifyIcon.Text = Translations.APP_NAME;
+            m_notifyIcon.Text = $"{Translations.APP_NAME} {AppVersion.Display}";
             TrackDisplay.Text = Translations.TRACK_DISPLAY_OPTIONS;
             ArtistCheckbox.Content = Translations.ARTIST;
             TitleCheckbox.Content = Translations.SONG_TITLE;
@@ -214,6 +214,12 @@ namespace CurrentlyListening.Windows
                     return;
                 }
 
+                // The old file would otherwise keep the last song forever for any overlay still reading it.
+                var oldPath = AppSettings.OutputFilePath;
+                if (!string.Equals(Path.GetFullPath(oldPath), Path.GetFullPath(dialog.FileName),
+                        StringComparison.OrdinalIgnoreCase))
+                    AppSettings.TryWriteFile(oldPath, Translations.OUTPUT_FILE_RELINK);
+
                 AppSettings.OutputFilePath = dialog.FileName; // the setter saves
 
                 MessageBox.Show(string.Format(Translations.FILE_SAVED, dialog.FileName), Translations.FILE_SAVED_CAPTION,
@@ -235,7 +241,7 @@ namespace CurrentlyListening.Windows
             OutputBox.Text = text;
             try
             {
-                File.WriteAllText(AppSettings.OutputFilePath, text);
+                AppSettings.WriteOutputFile(text);
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
@@ -566,14 +572,6 @@ namespace CurrentlyListening.Windows
                 if (string.IsNullOrEmpty(content))
                 {
                     output = Translations.NOTHING_PLAYING;
-                    if (AppSettings.TrailingSpacesCount != 0)
-                    {
-                        for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
-                        {
-                            output += " ";
-                        }
-                    }
-
                     _isPlaying = false;
                     WriteOutput(output);
                 }
@@ -588,14 +586,6 @@ namespace CurrentlyListening.Windows
                     if (!_isPlaying)
                     {
                         output = Translations.NOTHING_PLAYING;
-                        if (AppSettings.TrailingSpacesCount != 0)
-                        {
-                            for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
-                            {
-                                output += " ";
-                            }
-                        }
-
                         WriteOutput(output);
                         return;
                     }
@@ -626,14 +616,6 @@ namespace CurrentlyListening.Windows
                         output += $"{FormatTime(progressMs)} / {FormatTime(durationMs)}";
                     }
 
-                    if (AppSettings.TrailingSpacesCount != 0)
-                    {
-                        for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
-                        {
-                            output += " ";
-                        }
-                    }
-
                     WriteOutput(output);
                     _lastArtist = artist;
                     _lastTitle = title;
@@ -650,14 +632,6 @@ namespace CurrentlyListening.Windows
             if (!_isPlaying)
             {
                 output = Translations.NOTHING_PLAYING;
-                if (AppSettings.TrailingSpacesCount != 0)
-                {
-                    for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
-                    {
-                        output += " ";
-                    }
-                }
-
                 WriteOutput(output);
                 return;
             }
@@ -700,14 +674,6 @@ namespace CurrentlyListening.Windows
             {
                 if (!string.IsNullOrEmpty(output)) output += " ";
                 output += $"{FormatTime(elapsed)} / {FormatTime(_currentSongDuration)}";
-            }
-
-            if (AppSettings.TrailingSpacesCount != 0)
-            {
-                for (int i = 0; i < AppSettings.TrailingSpacesCount; i++)
-                {
-                    output += " ";
-                }
             }
 
             WriteOutput(output);
@@ -801,11 +767,6 @@ namespace CurrentlyListening.Windows
             }
         }
 
-        private static Version GetCurrentVersion()
-        {
-            return Assembly.GetExecutingAssembly().GetName().Version ?? new Version(1, 0, 0, 0);
-        }
-
         private static Version ParseVersion(string tag)
         {
             if (string.IsNullOrWhiteSpace(tag))
@@ -843,7 +804,7 @@ namespace CurrentlyListening.Windows
                 if (latestRelease == null || string.IsNullOrWhiteSpace(latestRelease.TagName))
                     return;
 
-                var currentVersion = GetCurrentVersion();
+                var currentVersion = AppVersion.Current;
                 var latestVersion = ParseVersion(latestRelease.TagName);
 
                 if (latestVersion > currentVersion)

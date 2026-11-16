@@ -58,7 +58,34 @@ namespace CurrentlyListening.Resources {
                 resourceCulture = value;
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Email:.
+        /// </summary>
+        internal static string ABOUT_EMAIL {
+            get {
+                return ResourceManager.GetString("ABOUT_EMAIL", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string ABOUT_TITLE {
+            get {
+                return ResourceManager.GetString("ABOUT_TITLE", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        internal static string ABOUT_VERSION {
+            get {
+                return ResourceManager.GetString("ABOUT_VERSION", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to CurrentlyListening failed to start:.
         /// </summary>
@@ -146,6 +173,15 @@ namespace CurrentlyListening.Resources {
         internal static string CLOSE {
             get {
                 return ResourceManager.GetString("CLOSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output file text when app is closed.
+        /// </summary>
+        internal static string CLOSED_TEXT_LABEL {
+            get {
+                return ResourceManager.GetString("CLOSED_TEXT_LABEL", resourceCulture);
             }
         }
         
@@ -406,6 +442,15 @@ namespace CurrentlyListening.Resources {
         internal static string OUTPUT_FILE_NOT_WRITABLE {
             get {
                 return ResourceManager.GetString("OUTPUT_FILE_NOT_WRITABLE", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Output file moved, please relink.
+        /// </summary>
+        internal static string OUTPUT_FILE_RELINK {
+            get {
+                return ResourceManager.GetString("OUTPUT_FILE_RELINK", resourceCulture);
             }
         }
 

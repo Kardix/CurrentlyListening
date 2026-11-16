@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="About"
         Width="460"
-        Height="310"
+        Height="345"
         MinWidth="420"
-        MinHeight="260"
+        MinHeight="345"
         MaxWidth="650"
         MaxHeight="420"
         ResizeMode="CanResize"
@@ -51,8 +51,9 @@
                    Source="/Resources/icon.ico" />
 
 
-            <TextBlock Grid.Column="1"
-                       Text="CurrentlyListening"
+            <TextBlock x:Name="TitleText"
+                       Grid.Column="1"
+                       Text="About"
                        Foreground="White"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -106,20 +107,37 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="12" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="90" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Row="0"
+                        <TextBlock x:Name="VersionLabel"
+                                   Grid.Row="0"
+                                   Grid.Column="0"
+                                   Text="Version:"
+                                   FontWeight="SemiBold"
+                                   Foreground="#374151"
+                                   VerticalAlignment="Center" />
+
+                        <TextBlock x:Name="VersionValue"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   Foreground="#374151"
+                                   VerticalAlignment="Center" />
+
+                        <TextBlock x:Name="EmailLabel"
+                                   Grid.Row="2"
                                    Grid.Column="0"
                                    Text="Email:"
                                    FontWeight="SemiBold"
                                    Foreground="#374151"
                                    VerticalAlignment="Center" />
 
-                        <TextBlock Grid.Row="0"
+                        <TextBlock Grid.Row="2"
                                    Grid.Column="1"
                                    TextWrapping="Wrap">
                             <Hyperlink NavigateUri="mailto:tkonorgaming@gmail.com"
@@ -128,14 +146,14 @@
                             </Hyperlink>
                         </TextBlock>
 
-                        <TextBlock Grid.Row="2"
+                        <TextBlock Grid.Row="4"
                                    Grid.Column="0"
                                    Text="Twitch:"
                                    FontWeight="SemiBold"
                                    Foreground="#374151"
                                    VerticalAlignment="Center" />
 
-                        <TextBlock Grid.Row="2"
+                        <TextBlock Grid.Row="4"
                                    Grid.Column="1"
                                    TextWrapping="Wrap">
                             <Hyperlink NavigateUri="https://twitch.tv/tkonor"
@@ -144,14 +162,14 @@
                             </Hyperlink>
                         </TextBlock>
 
-                        <TextBlock Grid.Row="4"
+                        <TextBlock Grid.Row="6"
                                    Grid.Column="0"
                                    Text="YouTube:"
                                    FontWeight="SemiBold"
                                    Foreground="#374151"
                                    VerticalAlignment="Center" />
 
-                        <TextBlock Grid.Row="4"
+                        <TextBlock Grid.Row="6"
                                    Grid.Column="1"
                                    TextWrapping="Wrap">
                             <Hyperlink NavigateUri="https://www.youtube.com/@TKoNoR"

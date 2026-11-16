@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings"
         Width="560"
-        Height="470"
+        Height="550"
         MinWidth="470"
-        MinHeight="430"
+        MinHeight="510"
         MaxWidth="700"
-        MaxHeight="520"
+        MaxHeight="600"
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -267,6 +267,16 @@
                                      HorizontalContentAlignment="Center"
                                      TextChanged="TrailingSpacesTextBox_OnTextChanged" />
                         </Grid>
+
+                        <TextBlock Name="ClosedTextLabel"
+                                   Text="Output file text when app is closed"
+                                   FontWeight="SemiBold"
+                                   Foreground="#374151"
+                                   Margin="0,16,0,12" />
+
+                        <TextBox x:Name="ClosedTextBox"
+                                 VerticalContentAlignment="Center"
+                                 TextChanged="ClosedTextBox_OnTextChanged" />
                     </StackPanel>
                 </Border>
 

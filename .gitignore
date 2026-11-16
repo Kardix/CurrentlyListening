@@ -1,3 +1,17 @@
 /.idea/.idea.SpotifyRetranslator/.idea/.gitignore
 /.idea/.idea.SpotifyRetranslator/.idea/aws.xml
 /.idea/.idea.SpotifyRetranslator/.idea/indexLayout.xml
+
+# Build output
+bin/
+obj/
+
+# IDE / per-user files
+.vs/
+*.user
+/.idea/.idea.SpotifyRetranslator/.idea/.name
+
+# Claude Code local settings
+.claude/settings.local.json
+.claude
+openspec

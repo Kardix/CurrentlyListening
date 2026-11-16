@@ -95,6 +95,21 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Počet mezer na konci výstupního souboru</value>
   </data>
+  <data name="CLOSED_TEXT_LABEL" xml:space="preserve">
+    <value>Text výstupního souboru při zavřené aplikaci</value>
+  </data>
+  <data name="OUTPUT_FILE_RELINK" xml:space="preserve">
+    <value>Výstupní soubor byl přesunut, propojte ho znovu</value>
+  </data>
+  <data name="ABOUT_TITLE" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
+  <data name="ABOUT_VERSION" xml:space="preserve">
+    <value>Verze:</value>
+  </data>
+  <data name="ABOUT_EMAIL" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
   <data name="CHECK_FOR_UPDATES" xml:space="preserve">
     <value>Kontrolovat aktualizace při spuštění</value>
   </data>

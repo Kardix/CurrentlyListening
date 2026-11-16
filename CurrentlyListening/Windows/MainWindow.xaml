@@ -175,12 +175,21 @@
                    VerticalAlignment="Center"
                    Source="/Resources/icon.ico" />
 
-            <TextBlock Grid.Column="1"
-                       Text="CurrentlyListening"
-                       Foreground="White"
-                       FontSize="14"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <TextBlock Text="CurrentlyListening"
+                           Foreground="White"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center" />
+
+                <TextBlock x:Name="VersionText"
+                           Foreground="#9CA3AF"
+                           FontSize="11"
+                           Margin="6,1,0,0"
+                           VerticalAlignment="Center" />
+            </StackPanel>
 
             <Button Grid.Column="2"
                     Content="—"

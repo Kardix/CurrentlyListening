@@ -19,7 +19,29 @@ namespace CurrentlyListening.Windows
             TrailingSpacesSlider.Value = AppSettings.TrailingSpacesCount;
             TrailingSpacesTextBox.Text = AppSettings.TrailingSpacesCount.ToString();
             ShowPopUpOnFail.IsChecked = AppSettings.ShowPopupOnFail;
-            
+            ClosedTextBox.Text = AppSettings.ClosedText;
+
+            _savedTrailingSpaces = AppSettings.TrailingSpacesCount;
+            _savedClosedText = AppSettings.ClosedText;
+            TrailingSpacesSlider.LostFocus += (s, e) => SaveIfChanged();
+            TrailingSpacesTextBox.LostFocus += (s, e) => SaveIfChanged();
+            ClosedTextBox.LostFocus += (s, e) => SaveIfChanged();
+            Closed += (s, e) => SaveIfChanged();
+        }
+
+        // Trailing spaces and the closed text apply live but are saved only on focus loss or
+        // window close, so typing or dragging the slider doesn't rewrite settings.json each time.
+        private int _savedTrailingSpaces;
+        private string _savedClosedText;
+
+        private void SaveIfChanged()
+        {
+            if (AppSettings.TrailingSpacesCount == _savedTrailingSpaces && AppSettings.ClosedText == _savedClosedText)
+                return;
+
+            AppSettings.SaveSettings();
+            _savedTrailingSpaces = AppSettings.TrailingSpacesCount;
+            _savedClosedText = AppSettings.ClosedText;
         }
 
         private void NameLabels()
@@ -31,7 +53,12 @@ namespace CurrentlyListening.Windows
             TrailingSpaces.Text = Translations.TRAILING_SPACES_TEXT;
             CheckForUpdates.Content = Translations.CHECK_FOR_UPDATES;
             ShowPopUpOnFail.Content = Translations.AUTH_FAIL_POPUP;
-            
+            ClosedTextLabel.Text = Translations.CLOSED_TEXT_LABEL;
+        }
+
+        private void ClosedTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            AppSettings.ClosedText = ClosedTextBox.Text;
         }
 
         private void CloseShouldMinimize_OnClick(object sender, RoutedEventArgs e)

@@ -95,6 +95,21 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Liczba spacji na końcu pliku wyjściowego</value>
   </data>
+  <data name="CLOSED_TEXT_LABEL" xml:space="preserve">
+    <value>Tekst pliku wyjściowego po zamknięciu aplikacji</value>
+  </data>
+  <data name="OUTPUT_FILE_RELINK" xml:space="preserve">
+    <value>Plik wyjściowy przeniesiony, połącz go ponownie</value>
+  </data>
+  <data name="ABOUT_TITLE" xml:space="preserve">
+    <value>O programie</value>
+  </data>
+  <data name="ABOUT_VERSION" xml:space="preserve">
+    <value>Wersja:</value>
+  </data>
+  <data name="ABOUT_EMAIL" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
   <data name="LATEST_VERSION" xml:space="preserve">
     <value>Najnowsza wersja:</value>
   </data>

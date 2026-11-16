@@ -95,6 +95,21 @@
   <data name="TRAILING_SPACES_TEXT" xml:space="preserve">
     <value>Nombre d'espaces à la fin dans le fichier de sortie</value>
   </data>
+  <data name="CLOSED_TEXT_LABEL" xml:space="preserve">
+    <value>Texte du fichier de sortie quand l'app est fermée</value>
+  </data>
+  <data name="OUTPUT_FILE_RELINK" xml:space="preserve">
+    <value>Fichier de sortie déplacé, reliez-le à nouveau</value>
+  </data>
+  <data name="ABOUT_TITLE" xml:space="preserve">
+    <value>À propos</value>
+  </data>
+  <data name="ABOUT_VERSION" xml:space="preserve">
+    <value>Version :</value>
+  </data>
+  <data name="ABOUT_EMAIL" xml:space="preserve">
+    <value>E-mail :</value>
+  </data>
   <data name="CHECK_FOR_UPDATES" xml:space="preserve">
     <value>Vérifier les mises à jour au démarrage</value>
   </data>

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Navigation;
+using CurrentlyListening.Resources;
 
 namespace CurrentlyListening.Windows
 {
@@ -9,6 +10,10 @@ namespace CurrentlyListening.Windows
         public AboutWindow()
         {
             InitializeComponent();
+            Title = TitleText.Text = Translations.ABOUT_TITLE;
+            VersionLabel.Text = Translations.ABOUT_VERSION;
+            EmailLabel.Text = Translations.ABOUT_EMAIL;
+            VersionValue.Text = AppVersion.Display;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
