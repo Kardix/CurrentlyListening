@@ -1,12 +1,10 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using CurrentlyListening.Resources;
-using Cursors = System.Windows.Input.Cursors;
 
 namespace CurrentlyListening.Windows;
 

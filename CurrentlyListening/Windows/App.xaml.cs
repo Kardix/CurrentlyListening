@@ -5,8 +5,10 @@ using System.Windows;
 using System.Windows.Threading;
 using CurrentlyListening.Properties;
 using CurrentlyListening.Resources;
+using System.Windows.Interop;
+using System.Windows.Media;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace CurrentlyListening.Windows;
 
@@ -15,7 +17,7 @@ namespace CurrentlyListening.Windows;
 /// </summary>
 public partial class App : Application
 {
-    private IHost _host;
+    private ServiceProvider _services;
 
     private static readonly string CrashLogPath = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -25,6 +27,10 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // Render in software before any window exists, so WPF never sets up Direct3D
+        // and the GPU driver for this small form. Must come first to take effect.
+        RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+
         base.OnStartup(e);
 
         // Catch anything that escapes so a startup fault is logged (and shown)
@@ -35,14 +41,15 @@ public partial class App : Application
 
         try
         {
-            _host = Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddHttpClient(); // Registers IHttpClientFactory
-                    services.AddSingleton<MainWindow>();
-                    // Also register any services that depend on IHttpClientFactory here
-                })
-                .Build();
+            // A plain container instead of the Generic Host: the app only needs IHttpClientFactory,
+            // not the host's config sources, file watcher and four logging providers.
+            // Minimum level Error with no providers: the factory's per-request Information
+            // messages are never created. crash.log stays the app's only log.
+            _services = new ServiceCollection()
+                .AddLogging(logging => logging.SetMinimumLevel(LogLevel.Error))
+                .AddHttpClient() // Registers IHttpClientFactory
+                .AddSingleton<MainWindow>()
+                .BuildServiceProvider();
 
             AppSettings.LoadSettings();
             var culture = AppSettings.GetCulture();
@@ -50,7 +57,7 @@ public partial class App : Application
             Thread.CurrentThread.CurrentCulture = culture;
 
             // Resolve main window and show it
-            var mainWindow = _host.Services.GetRequiredService<MainWindow>();
+            var mainWindow = _services.GetRequiredService<MainWindow>();
             if (!AppSettings.StartMinimized)
                 mainWindow.Show();
         }
@@ -67,6 +74,14 @@ public partial class App : Application
     protected override void OnExit(ExitEventArgs e)
     {
         AppSettings.TryWriteClosedText();
+        try
+        {
+            _services?.Dispose();
+        }
+        catch
+        {
+            // Never let disposing services stand in the way of exiting.
+        }
         base.OnExit(e);
     }
 
@@ -97,7 +112,7 @@ public partial class App : Application
         e.SetObserved();
     }
 
-    private static void LogException(string source, Exception ex)
+    internal static void LogException(string source, Exception ex)
     {
         try
         {

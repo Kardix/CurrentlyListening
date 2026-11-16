@@ -9,7 +9,6 @@ using System.Text;
 using System.Web;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using CurrentlyListening.Models;
@@ -17,8 +16,6 @@ using CurrentlyListening.Properties;
 using CurrentlyListening.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Application = System.Windows.Application;
-using MessageBox = System.Windows.MessageBox;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace CurrentlyListening.Windows
@@ -53,9 +50,8 @@ namespace CurrentlyListening.Windows
 
         private SpotifyToken _tokens;
         string output = "";
-        private NotifyIcon m_notifyIcon;
-        private ContextMenuStrip _trayMenu;
-        private ToolStripMenuItem exitItem;
+        private TrayIcon _trayIcon;
+        private MenuItem _exitItem;
 
         // Settings are already loaded by App.OnStartup before this window is created.
         public MainWindow(IHttpClientFactory httpClientFactory)
@@ -80,7 +76,6 @@ namespace CurrentlyListening.Windows
             }
 
             LanguageSelector.SelectionChanged += LanguageSelector_SelectionChanged;
-            m_notifyIcon = new NotifyIcon();
             InitializeTray();
             NameLabels();
 
@@ -109,34 +104,22 @@ namespace CurrentlyListening.Windows
 
         private void InitializeTray()
         {
-            _trayMenu = new ContextMenuStrip();
+            _exitItem = new MenuItem { Header = Translations.CLOSE };
+            _exitItem.Click += ExitItem_Click;
 
-            exitItem = new ToolStripMenuItem(Translations.CLOSE);
-            exitItem.Click += ExitItem_Click;
+            var trayMenu = new ContextMenu();
+            trayMenu.Items.Add(_exitItem);
 
-            _trayMenu.Items.Add(exitItem);
-
-            var uri = new Uri("pack://application:,,,/Resources/icon.ico");
-            var streamInfo = Application.GetResourceStream(uri);
-            m_notifyIcon = new NotifyIcon
+            _trayIcon = new TrayIcon(new Uri("pack://application:,,,/Resources/icon.ico"))
             {
-                Icon = new System.Drawing.Icon(streamInfo.Stream), // or your app icon
-                Visible = true,
-                ContextMenuStrip = _trayMenu
+                ContextMenu = trayMenu
             };
 
-            m_notifyIcon.MouseClick += (s, e) =>
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    // Right click logic
-                    // Usually you don't need this if using ContextMenuStrip
-                    // But you can force show menu manually if needed:
-                    _trayMenu.Show();
-                }
-            };
+            // Every exit that runs code (tray Close, window close, update, Windows signing out)
+            // ends in Application.Exit; removing the icon there leaves no dead icon behind.
+            Application.Current.Exit += (s, e) => _trayIcon.Dispose();
 
-            m_notifyIcon.DoubleClick += (s, e) =>
+            _trayIcon.DoubleClick += (s, e) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -152,31 +135,16 @@ namespace CurrentlyListening.Windows
             };
         }
 
-        private void ExitItem_Click(object sender, EventArgs e)
+        private void ExitItem_Click(object sender, RoutedEventArgs e)
         {
-            m_notifyIcon.Visible = false;
-            m_notifyIcon.Dispose();
+            _trayIcon.Dispose();
             Closing -= MainWindow_Closing;
             Application.Current.Shutdown();
         }
 
-        void OnClose(object sender, CancelEventArgs args)
-        {
-            if (WindowState == WindowState.Normal)
-            {
-                Hide();
-                if (m_notifyIcon != null)
-                    m_notifyIcon.ShowBalloonTip(2000);
-            }
-            else
-                WindowState = WindowState.Normal;
-        }
-
         private void NameLabels()
         {
-            m_notifyIcon.BalloonTipText = Translations.MINIMIZE_NOTIFICATION_TEXT;
-            m_notifyIcon.BalloonTipTitle = Translations.APP_NAME;
-            m_notifyIcon.Text = $"{Translations.APP_NAME} {AppVersion.Display}";
+            _trayIcon.Text = $"{Translations.APP_NAME} {AppVersion.Display}";
             TrackDisplay.Text = Translations.TRACK_DISPLAY_OPTIONS;
             ArtistCheckbox.Content = Translations.ARTIST;
             TitleCheckbox.Content = Translations.SONG_TITLE;
@@ -190,7 +158,7 @@ namespace CurrentlyListening.Windows
             ClientIdText.Text = Translations.CLIENT_ID;
             ClientSecretText.Text = Translations.CLIENT_SECRET;
             CreatedBy.Text = Translations.CREATED_BY;
-            exitItem.Text = Translations.CLOSE;
+            _exitItem.Header = Translations.CLOSE;
             Settings.Content = Translations.SETTINGS;
         }
 
@@ -758,12 +726,8 @@ namespace CurrentlyListening.Windows
                 // Hide instead
                 Hide();
 
-                // Optional: show tray balloon once
-                m_notifyIcon?.ShowBalloonTip(
-                    2000,
-                    Translations.APP_NAME,
-                    Translations.MINIMIZE_NOTIFICATION_TEXT,
-                    ToolTipIcon.Info);
+                // Tell the user the app is still running in the tray.
+                _trayIcon?.ShowBalloon(Translations.APP_NAME, Translations.MINIMIZE_NOTIFICATION_TEXT);
             }
         }
 

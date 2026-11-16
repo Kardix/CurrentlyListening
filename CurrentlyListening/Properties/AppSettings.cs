@@ -219,17 +219,39 @@ public static class AppSettings
     private static readonly object OutputFileLock = new();
     private static bool _outputClosed;
 
+    // The last content successfully written by WriteOutputFile, and where. Lets the 1-second
+    // display timer skip rewriting a file that already holds exactly this content.
+    private static string _lastWrittenPath;
+    private static string _lastWrittenContent;
+
     public static string WithTrailingSpaces(string text) =>
         string.IsNullOrEmpty(text) ? "" : text + new string(' ', _trailingSpacesCount);
 
     // Every write to the output file goes through here. Throws IOException or
     // UnauthorizedAccessException like File.WriteAllText. Ignored once the app is closing.
+    // Skipped when the same content (trailing spaces included) was already written to the
+    // same path and the file still exists. The first write of a run, a new path, a deleted
+    // file and a retry after a failed write always go through.
     public static void WriteOutputFile(string text)
     {
         lock (OutputFileLock)
         {
-            if (!_outputClosed)
-                File.WriteAllText(_outputFilePath, WithTrailingSpaces(text));
+            if (_outputClosed)
+                return;
+
+            var path = _outputFilePath;
+            var content = WithTrailingSpaces(text);
+            if (content == _lastWrittenContent &&
+                string.Equals(path, _lastWrittenPath, StringComparison.OrdinalIgnoreCase) &&
+                File.Exists(path))
+                return;
+
+            // Forget the last write first: if this one fails partway, the file's content is
+            // unknown and the next tick must write again whatever the text is.
+            _lastWrittenContent = null;
+            File.WriteAllText(path, content);
+            _lastWrittenPath = path;
+            _lastWrittenContent = content;
         }
     }
 
